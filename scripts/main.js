@@ -32,7 +32,7 @@ function mouseMoved() {
     strokeWeight(thickness);
     stroke(255 + 255*Math.pow(-1,i)); // alternate color between black and white
     noFill();
-    arc((mouseX * (numCircles - i)/numCircles + windowWidth/2 * i/numCircles), (i+1)*thickness + (mouseY * (numCircles - i)/numCircles + windowHeight/2 * i/numCircles), (i+1)*thickness, (i+1)*thickness, -PI, PI);
+    arc((mouseX * (numCircles - i)/numCircles + windowWidth/2 * i/numCircles), (i+2)*thickness + (mouseY * (numCircles - i)/numCircles + windowHeight/2 * i/numCircles), (i+3)*thickness, (i+3)*thickness, -PI, PI);
   }
   
   return false;
