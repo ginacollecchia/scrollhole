@@ -1,4 +1,4 @@
-let pos
+let pos = 0
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -28,7 +28,6 @@ function mouseMoved() {
   for (i = numCircles; i >= -1; i--) {
     strokeWeight(thickness);
     stroke(255 + 255*Math.pow(-1,i)); // alternate color between black and white
-    stroke(255, 0, 0); // alternate color between black and white
     noFill();
     // start with smallest circle. center relative to mouse position and center of screen. outermost circle should be the same every time regardless of mouse position.
     // circle(windowWidth / 2, windowHeight / 2, diameter - i*thickness);
