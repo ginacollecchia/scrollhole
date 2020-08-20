@@ -1,3 +1,5 @@
+let pos = 0
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -8,10 +10,9 @@ function setup() {
 }
 
 function mouseWheel(event) {
-  print(event.delta);
-  console.log(event.delta)
   //move the square according to the vertical scroll amount
-  pos += event.delta;
+  pos += event.delta
+  print(event.delta, pos)
   //uncomment to block page scrolling
   //return false;
 }
