@@ -4,6 +4,7 @@ let isPlaying = false
 let scrollSpeed = 0
 let playbackSpeed = 0
 let buffer
+let center = { x:0, y:0 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight)
@@ -15,6 +16,9 @@ function setup() {
   buffer = new Tone.Buffer('./audio/riddim.mp3')
   grainPlayer = new Tone.GrainPlayer(buffer).toDestination()
 
+  center.x = width / 2.0
+  center.y = height / 2.0
+  infShapes = new InfiniteShapes()
 }
 
 function mouseWheel(event) {
@@ -49,6 +53,12 @@ function keyPressed(event) {
       grainPlayer.start()
     }
   }
+}
+
+function draw() {
+  background(bgCol)
+  infShapes.draw(center)
+  infShapes.update()
 }
 
 // function mouseMoved() {
