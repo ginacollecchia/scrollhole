@@ -2,7 +2,9 @@
 In Terminal:
 
 cd /path/to/scrollhole
+
 npm install
+
 npx serve public/
 
 Then in the browser, open:
