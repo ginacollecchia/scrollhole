@@ -1,0 +1,26 @@
+{
+  "name": "oscilot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "osc + socket demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js | pino-pretty",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Myles Borins <myles.borins@gmail.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fastify": "^2.15.1",
+    "fastify-static": "^2.7.0",
+    "node-osc": "^5.1.0",
+    "pino": "^6.2.0",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3",
+    "pino-pretty": "^4.0.0"
+  }
+}
