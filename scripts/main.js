@@ -4,13 +4,14 @@ let isPlaying = false
 let scrollSpeed = 0
 let playbackSpeed = 0
 let buffer
+let bgCol
 let center = { x:0, y:0 }
 
 function setup() {
+  frameRate(8)
   createCanvas(windowWidth, windowHeight)
-
   bgCol = color(207, 236, 207) // minty
-  background(bgCol)
+
   textSize(22)
 
   buffer = new Tone.Buffer('./audio/riddim.mp3')
@@ -19,6 +20,7 @@ function setup() {
   center.x = width / 2.0
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
+  infShapes.updateGroup(5)
 }
 
 function mouseWheel(event) {
