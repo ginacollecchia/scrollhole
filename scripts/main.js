@@ -5,6 +5,14 @@ let scrollSpeed = 0
 let playbackSpeed = 0
 let buffer
 let center = { x:0, y:0 }
+let audioBuffers = []
+let muteButton, unmuteButton
+let region = 0
+let isMuted = false
+
+function preload() {
+  audioBuffers[0] = new Tone.Buffer('./audio/riddim.mp3')
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight)
@@ -13,12 +21,23 @@ function setup() {
   background(bgCol)
   textSize(22)
 
-  buffer = new Tone.Buffer('./audio/riddim.mp3')
-  grainPlayer = new Tone.GrainPlayer(buffer).toDestination()
+  grainPlayer = new Tone.GrainPlayer(audioBuffers[region]).toDestination()
 
   center.x = width / 2.0
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
+  
+  unmuteButton = createImg('./img/unmuteAudio.png')
+  unmuteButton.size(50, 50)
+  unmuteButton.position(windowWidth - 70, 10)
+  unmuteButton.mousePressed(toggleMute)
+  unmuteButton.hide()
+
+  muteButton = createImg('./img/muteAudio.png')
+  muteButton.size(50, 50)
+  muteButton.position(windowWidth - 70, 10)
+  muteButton.mousePressed(toggleMute)
+  muteButton.show()
 }
 
 function mouseWheel(event) {
@@ -55,11 +74,24 @@ function keyPressed(event) {
   }
 }
 
+function toggleMute() {
+  isMuted = !isMuted    
+}
+
 function draw() {
   background(bgCol)
   infShapes.draw(center)
   infShapes.update()
+
+  if (isMuted) {
+    unmuteButton.show()
+    muteButton.hide()
+  } else {
+    unmuteButton.hide()
+    muteButton.show()
+  }
 }
+
 
 // function mouseMoved() {
 
