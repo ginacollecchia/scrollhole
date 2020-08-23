@@ -4,6 +4,7 @@ let isPlaying = false
 let scrollSpeed = 0
 let playbackSpeed = 0
 let buffer
+let bgCol
 let center = { x:0, y:0 }
 let audioBuffers = []
 let muteButton, unmuteButton
@@ -15,10 +16,10 @@ function preload() {
 }
 
 function setup() {
+  frameRate(8)
   createCanvas(windowWidth, windowHeight)
-
   bgCol = color(207, 236, 207) // minty
-  background(bgCol)
+
   textSize(22)
 
   grainPlayer = new Tone.GrainPlayer(audioBuffers[region]).toDestination()
@@ -26,6 +27,7 @@ function setup() {
   center.x = width / 2.0
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
+  infShapes.updateGroup(5)
   
   unmuteButton = createImg('./img/unmuteAudio.png')
   unmuteButton.size(50, 50)
@@ -38,6 +40,7 @@ function setup() {
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
   muteButton.show()
+
 }
 
 function mouseWheel(event) {
