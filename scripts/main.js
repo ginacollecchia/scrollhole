@@ -42,13 +42,13 @@ function setup() {
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
   muteButton.show()
+
+  var options = {
+    preventDefault: true
+  }
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
-
-function mouseWheel(event) {
+function scrollZoom(event) {
   scrollSpeed = event.delta
   scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
   // playbackSpeed = Math.log(abs(scrollSpeed) + 1)
@@ -77,6 +77,14 @@ function mouseWheel(event) {
   }
 
   infShapes.scroll(scrollSpeed / 30000.0)
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+function mouseWheel(event) {
+  scrollZoom(event)
 }
 
 function keyPressed(event) {
