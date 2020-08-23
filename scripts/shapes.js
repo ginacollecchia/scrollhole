@@ -51,7 +51,7 @@ function Polygon(i, g, maxDist) {
     } else {
       rotate(-frameCount / 60.0)
     }
-    polygon(0, 0, localPos ** 2.5 * maxDist + this.maxWeight, 7)
+    polygon(0, 0, localPos ** 2.5 * maxDist + this.maxWeight * localPos, 7)
     pop()
 
     return localPos > 1.0
