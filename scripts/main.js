@@ -11,6 +11,14 @@ let regionIdx = 0
 
 function preload() {
   audioBuffers[0] = new Tone.Buffer('./audio/riddim.mp3')
+  grainPlayer = new Tone.GrainPlayer(audioBuffers[regionIdx])
+  grainPlayer.playbackRate = playbackSpeed
+  grainPlayer.reverse = false
+  grainPlayer.volume = volume
+  grainPlayer.grainSize = grainSize
+  grainPlayer.overlap = density
+  grainPlayer.loop = true
+  grainPlayer.toMaster()
 }
 
 function setup() {
@@ -19,11 +27,6 @@ function setup() {
 
   bgCol = color(207, 236, 207) // minty
   textSize(22)
-
-  grainPlayer = new Tone.GrainPlayer(audioBuffers[regionIdx]).toDestination()
-  grainPlayer.playbackRate = playbackSpeed
-  grainPlayer.reverse = false
-  grainPlayer.volume = volume
 
   center.x = width / 2.0
   center.y = height / 2.0
@@ -48,8 +51,24 @@ function setup() {
   }
 }
 
+function draw() {
+  background(bgCol)
+  infShapes.draw(center)
+  infShapes.update()
+
+  if (isMuted) {
+    muteButton.hide()
+    unmuteButton.show()
+  } else {
+    unmuteButton.hide()
+    muteButton.show()
+  }
+}
+
 function scrollZoom(event) {
   scrollSpeed = event.delta
+  infShapes.scroll(scrollSpeed / 30000.0)
+  
   scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
   // playbackSpeed = Math.log(abs(scrollSpeed) + 1)
   playbackSpeed = 1
@@ -57,26 +76,23 @@ function scrollZoom(event) {
   // make sure it's not too loud or too quiet
   volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
   // map(value, start1, stop1, start2, stop2, [withinBounds])
-  grainSize = map(scrollSpeedSmoothed, 0, 5, 0.01, 1, true)
+  grainSize = map(scrollSpeedSmoothed, 0, 7, 0.01, 1, true)
   console.log("Density = ", density, ", volume = ", volume, ", grainSize = ", grainSize, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
 
-  if (grainPlayer && grainPlayer.loaded) {
-    grainPlayer.playbackRate = playbackSpeed
-    grainPlayer.overlap = density
-    grainPlayer.volume = volume
-    grainPlayer.grainSize = grainSize
-    if (scrollSpeed < 0) {
-      grainPlayer.reverse = true
-    } else {
-      grainPlayer.reverse = false
-    }
-    if (!isPlaying) {
-      isPlaying = !isPlaying
-      grainPlayer.start()
-    }
+  grainPlayer.playbackRate = playbackSpeed
+  grainPlayer.overlap = 1/density
+  grainPlayer.volume = volume
+  grainPlayer.grainSize = grainSize
+  if (scrollSpeed < 0) {
+    grainPlayer.reverse = true
+  } else {
+    grainPlayer.reverse = false
   }
-
-  infShapes.scroll(scrollSpeed / 30000.0)
+  
+  if (!isPlaying) {
+    isPlaying = !isPlaying
+    grainPlayer.start()
+  }
 }
 
 function windowResized() {
@@ -95,21 +111,6 @@ function toggleMute() {
   isMuted = !isMuted
   grainPlayer.mute = isMuted
 }
-
-function draw() {
-  background(bgCol)
-  infShapes.draw(center)
-  infShapes.update()
-
-  if (isMuted) {
-    muteButton.hide()
-    unmuteButton.show()
-  } else {
-    unmuteButton.hide()
-    muteButton.show()
-  }
-}
-
 
 // function mouseMoved() {
 
