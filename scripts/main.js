@@ -1,4 +1,3 @@
-let pos = 0
 let grainPlayer
 let isPlaying = false
 let scrollSpeed = 0
@@ -8,10 +7,10 @@ let bgCol
 let center = { x:0, y:0 }
 
 function setup() {
-  frameRate(8)
-  createCanvas(windowWidth, windowHeight)
-  bgCol = color(207, 236, 207) // minty
+  let cvn = createCanvas(windowWidth, windowHeight)
+  cvn.style('display', 'block')
 
+  bgCol = color(207, 236, 207) // minty
   textSize(22)
 
   buffer = new Tone.Buffer('./audio/riddim.mp3')
@@ -20,17 +19,17 @@ function setup() {
   center.x = width / 2.0
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
-  infShapes.updateGroup(5)
+  infShapes.updateGroup(15)
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function mouseWheel(event) {
-  //move the square according to the vertical scroll amount
   scrollSpeed = event.delta
-  pos += scrollSpeed
   playbackSpeed = Math.log(abs(scrollSpeed) + 1)
-  console.log(playbackSpeed) // numbers seem to max out at ~500
-  //uncomment to block page scrolling
-  //return false
+
   if (grainPlayer) {
     grainPlayer.playbackRate = playbackSpeed
     if (scrollSpeed < 0) {
@@ -38,9 +37,9 @@ function mouseWheel(event) {
     } else {
       grainPlayer.reverse = false
     }
-
-    // console.log('player loaded');
   }
+
+  infShapes.scroll(event.delta / 30000.0)
 }
 
 function keyPressed(event) {
