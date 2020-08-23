@@ -1,14 +1,13 @@
 let grainPlayer
-let isPlaying = false
-let scrollSpeed = 0
-let playbackSpeed = 0
+let isPlaying = false, isMuted = false
+let scrollSpeed = 0, scrollSpeedSmoothed = 0
+let playbackSpeed = 0.1, density = 0.5, volume = 0.5, grainSize = 1
 let buffer
 let bgCol
 let center = { x:0, y:0 }
 let audioBuffers = []
 let muteButton, unmuteButton
-let region = 0
-let isMuted = false
+let regionIdx = 0
 
 function preload() {
   audioBuffers[0] = new Tone.Buffer('./audio/riddim.mp3')
@@ -21,7 +20,10 @@ function setup() {
   bgCol = color(207, 236, 207) // minty
   textSize(22)
 
-  grainPlayer = new Tone.GrainPlayer(audioBuffers[region]).toDestination()
+  grainPlayer = new Tone.GrainPlayer(audioBuffers[regionIdx]).toDestination()
+  grainPlayer.playbackRate = playbackSpeed
+  grainPlayer.reverse = false
+  grainPlayer.volume = volume
 
   center.x = width / 2.0
   center.y = height / 2.0
@@ -48,36 +50,42 @@ function windowResized() {
 
 function mouseWheel(event) {
   scrollSpeed = event.delta
-  playbackSpeed = Math.log(abs(scrollSpeed) + 1)
+  scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
+  // playbackSpeed = Math.log(abs(scrollSpeed) + 1)
+  playbackSpeed = 1
+  density = scrollSpeedSmoothed
+  // make sure it's not too loud or too quiet
+  volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
+  // map(value, start1, stop1, start2, stop2, [withinBounds])
+  grainSize = map(scrollSpeedSmoothed, 0, 5, 0.01, 1, true)
+  console.log("Density = ", density, ", volume = ", volume, ", grainSize = ", grainSize, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
 
-  if (grainPlayer) {
+  if (grainPlayer && grainPlayer.loaded) {
     grainPlayer.playbackRate = playbackSpeed
+    grainPlayer.overlap = density
+    grainPlayer.volume = volume
+    grainPlayer.grainSize = grainSize
     if (scrollSpeed < 0) {
       grainPlayer.reverse = true
     } else {
       grainPlayer.reverse = false
     }
-  }
-
-  infShapes.scroll(event.delta / 30000.0)
-}
-
-function keyPressed(event) {
-  if (grainPlayer) {
-    if (isPlaying) {
-      // we were playing, so we'll stop
+    if (!isPlaying) {
       isPlaying = !isPlaying
-      grainPlayer.stop()
-    } else {
-      // we weren't playing, so we'll start
-      isPlaying = !isPlaying;
       grainPlayer.start()
     }
   }
+
+  infShapes.scroll(scrollSpeed / 30000.0)
+}
+
+function keyPressed(event) {
+  
 }
 
 function toggleMute() {
   isMuted = !isMuted
+  grainPlayer.mute = isMuted
 }
 
 function draw() {
@@ -86,8 +94,8 @@ function draw() {
   infShapes.update()
 
   if (isMuted) {
-    unmuteButton.show()
     muteButton.hide()
+    unmuteButton.show()
   } else {
     unmuteButton.hide()
     muteButton.show()
