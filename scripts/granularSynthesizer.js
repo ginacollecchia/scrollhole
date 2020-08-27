@@ -47,22 +47,24 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
     grainPlayer.overlap = scrollSpeedSmoothed
     // make sure it's not too loud or too quiet
     // grainPlayer.volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
-    if (scrollSpeedSmoothed > 6) {
-      grainPlayer.volume.value = 0
-    } else {
-      grainPlayer.volume.value = scrollSpeedSmoothed - 6
+    if (!grainPlayer.mute) {
+      if (scrollSpeedSmoothed > 6) {
+        grainPlayer.volume.value = 0
+      } else {
+        grainPlayer.volume.value = scrollSpeedSmoothed - 6
+      }
     }
     // map(value, start1, stop1, start2, stop2, [withinBounds])
-    grainPlayer.grainSize = map(scrollSpeedSmoothed, 0, 7, 0.01, 1, true)
-    grainPlayer.playbackRate = scrollSpeedSmoothed
+    grainPlayer.grainSize = scrollSpeedSmoothed + 0.01
+    grainPlayer.playbackRate = scrollSpeedSmoothed + 0.01
     if (scrollSpeed < 0) {
       grainPlayer.reverse = true
-      scrollSpeedSmoothed *= -1
+      // scrollSpeedSmoothed *= -1
     } else {
       grainPlayer.reverse = false
     }
 
-    console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", scrollSpeedSmoothed, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
+    console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
 
     if (!this.isPlaying) {
       this.isPlaying = true

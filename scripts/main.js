@@ -74,7 +74,7 @@ function draw() {
 
 function scrollZoom(event) {
   scrollSpeed = event.delta
-  scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
+  scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
   infShapes.scroll(scrollSpeed / 30000.0)
 
   granularSynthesizer[regionIdx].playback(scrollSpeed, scrollSpeedSmoothed, startTime)
