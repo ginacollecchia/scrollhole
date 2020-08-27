@@ -1,14 +1,15 @@
 let resumeTime = 0
 let grainPlayer
 
-function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, density, loop) {
+function GranularSynthesizer(buffer) {
   grainPlayer = new Tone.GrainPlayer(buffer)
-  grainPlayer.playbackRate = playbackSpeed
-  grainPlayer.reverse = reverse
-  grainPlayer.volume.value = volume
-  grainPlayer.grainSize = grainSize
-  grainPlayer.overlap = density
-  grainPlayer.loop = loop
+
+  grainPlayer.playbackRate = 1.0
+  grainPlayer.reverse = false
+  grainPlayer.volume.value = 0
+  grainPlayer.grainSize = 0.5
+  grainPlayer.overlap = 0.5
+  grainPlayer.loop = true
 
   this.toDestination = function () {
     grainPlayer.toDestination()
@@ -16,6 +17,10 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
 
   this.connect = function (node) {
     grainPlayer.connect(node)
+  }
+
+  this.load = function(buffer) {
+    grainPlayer
   }
 
   this.isPlaying = true
@@ -59,3 +64,4 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
       grainPlayer.reverse = false
     }
   }
+}

@@ -1,21 +1,31 @@
 let isPlaying = false, isMuted = false
 let scrollSpeed = 0, scrollSpeedSmoothed = 0
 let scrollGlide = 0
-let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', '../audio/grass.mp3']
+let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
 let numRegions = 3
-let buffer = []
 let bgCol
 let center = { x:0, y:0 }
 let muteButton, unmuteButton
 let regionIdx = 1
-let granularSynthesizer = []
 const startTime = Tone.now()
-var i
+
+let granularSynthesizer = []
+let masterGain
 
 function preload() {
+  masterGain = new Tone.Gain()
+
   for (let i = 0; i < numRegions; i++) {
-    buffer[i] = new Tone.Buffer(soundFiles[i])
+    let buffer = new Tone.Buffer(soundFiles[i], function() {
+      let gs = new GranularSynthesizer(buffer)
+      gs.connect(masterGain)
+      gs.start(0)
+
+      granularSynthesizer[i] = gs
+    })
   }
+
+  masterGain.toDestination()
 }
 
 function setup() {
@@ -37,28 +47,16 @@ function setup() {
   unmuteButton.position(windowWidth - 70, 10)
   unmuteButton.mousePressed(toggleMute)
   unmuteButton.hide()
+
   muteButton = createImg('./img/muteAudio.png')
   muteButton.size(50, 50)
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
   muteButton.show()
 
-  // granular synthesizer constructor: buffer, playback speed, reverse bool, volume, grain size, overlap, loop bool
-  granularSynthesizer[0] = new GranularSynthesizer(buffer[0], 0.1, false, 0.5, 0.5, 0.5, true)
-  granularSynthesizer[1] = new GranularSynthesizer(buffer[1], 1, false, 0.5, 0.5, 0.5, true)
-  granularSynthesizer[2] = new GranularSynthesizer(buffer[2], 1, false, 0.5, 0.5, 0.5, true)
-
-  const masterGain = new Tone.Gain()
-  for (let i = 0; i < numRegions; i++) {
-    granularSynthesizer[i].connect(masterGain)
-  }
-  masterGain.toDestination()
-
   var options = {
     preventDefault: true
   }
-
-  granularSynthesizer[0].start(startTime)
 }
 
 function draw() {
@@ -80,7 +78,7 @@ function scrollZoom(event) {
   scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
 
   infShapes.scroll(scrollSpeed / 30000.0)
-  granularSynthesizer[0].playback(scrollSpeed, scrollSpeedSmoothed)
+  // granularSynthesizer[0].playback(scrollSpeed, scrollSpeedSmoothed)
 }
 
 function windowResized() {
@@ -97,7 +95,5 @@ function keyPressed(event) {
 
 function toggleMute() {
   isMuted = !isMuted
-  for (i = 0; i < numRegions; i++) {
-    granularSynthesizer[i].mute(isMuted)
-  }
+  masterGain.mute(isMuted)
 }
