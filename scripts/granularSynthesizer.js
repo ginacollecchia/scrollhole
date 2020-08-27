@@ -18,7 +18,7 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
     grainPlayer.connect(node)
   }
 
-  this.isPlaying = false
+  this.isPlaying = true
   this.mute = function (mute) {
     grainPlayer.mute = mute
   }
@@ -38,13 +38,9 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
     grainPlayer.start(0, resumeTime)
   }
 
-  this.playback = function(scrollSpeed, scrollSpeedSmoothed, startTime) {
-    if (this.isPlaying) {
-      this.isPlaying = false
-      this.pause(startTime)
-    }
-
+  this.playback = function(scrollSpeed, scrollSpeedSmoothed) {
     grainPlayer.overlap = scrollSpeedSmoothed
+
     // make sure it's not too loud or too quiet
     // grainPlayer.volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
     if (scrollSpeedSmoothed > 6) {
@@ -55,19 +51,11 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
     // map(value, start1, stop1, start2, stop2, [withinBounds])
     grainPlayer.grainSize = map(scrollSpeedSmoothed, 0, 7, 0.01, 1, true)
     grainPlayer.playbackRate = scrollSpeedSmoothed
+
     if (scrollSpeed < 0) {
       grainPlayer.reverse = true
       scrollSpeedSmoothed *= -1
     } else {
       grainPlayer.reverse = false
     }
-
-    console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", scrollSpeedSmoothed, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
-
-    if (!this.isPlaying) {
-      this.isPlaying = true
-      grainPlayer.start(0, resumeTime) // start it immediately and seek to resumeTime
-    }
   }
-
-}

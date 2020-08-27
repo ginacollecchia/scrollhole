@@ -1,5 +1,6 @@
 let isPlaying = false, isMuted = false
 let scrollSpeed = 0, scrollSpeedSmoothed = 0
+let scrollGlide = 0
 let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', '../audio/grass.mp3']
 let numRegions = 3
 let buffer = []
@@ -48,7 +49,7 @@ function setup() {
   granularSynthesizer[2] = new GranularSynthesizer(buffer[2], 1, false, 0.5, 0.5, 0.5, true)
 
   const masterGain = new Tone.Gain()
-  for (i = 0; i < numRegions; i++) {
+  for (let i = 0; i < numRegions; i++) {
     granularSynthesizer[i].connect(masterGain)
   }
   masterGain.toDestination()
@@ -56,6 +57,8 @@ function setup() {
   var options = {
     preventDefault: true
   }
+
+  granularSynthesizer[0].start(startTime)
 }
 
 function draw() {
@@ -75,9 +78,9 @@ function draw() {
 function scrollZoom(event) {
   scrollSpeed = event.delta
   scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
-  infShapes.scroll(scrollSpeed / 30000.0)
 
-  granularSynthesizer[regionIdx].playback(scrollSpeed, scrollSpeedSmoothed, startTime)
+  infShapes.scroll(scrollSpeed / 30000.0)
+  granularSynthesizer[0].playback(scrollSpeed, scrollSpeedSmoothed)
 }
 
 function windowResized() {
