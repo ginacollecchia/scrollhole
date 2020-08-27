@@ -50,7 +50,7 @@ function InfiniteShapes() {
   this.updateGroup = function(g) {
     for (let i = 0; i < g; i++) {
       shapes.push(
-        new Polygon(i, g, maxDist)
+        new Circle(i, g, maxDist)
       )
     }
   }

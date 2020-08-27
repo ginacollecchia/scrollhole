@@ -7,7 +7,7 @@ function Circle(i, g, maxDist) {
   this.visible = false
   this.ready = false
   this.color = 'red'
-  this.maxWeight = 100
+  this.maxWeight = 60
 
   this.draw = function(pos, center) {
     let localPos = map(pos, this.origin, this.origin + 1.0, 0.0, 1.0)
@@ -17,9 +17,17 @@ function Circle(i, g, maxDist) {
     }
 
     noFill()
-    strokeWeight(localPos ** 2.5 * this.maxWeight)
+    strokeWeight(localPos ** 2.5 * this.maxWeight * localPos)
     stroke(this.color)
-    circle(center.x, center.y, localPos ** 2.5 * maxDist + this.maxWeight)
+
+    let scaledX = (mouseX - width * 0.5) / (width * 2.0)
+    let scaledY = (mouseY - height * 0.5) / (height * 2.0)
+
+    circle(
+      center.x + Math.sin(localPos * PI) * width * scaledX,
+      center.y + Math.sin(localPos * PI) * height * scaledY,
+      localPos ** 2.5 * maxDist + this.maxWeight * localPos
+    )
 
     return localPos > 1.0
   }
@@ -51,7 +59,7 @@ function Polygon(i, g, maxDist) {
     } else {
       rotate(-frameCount / 60.0)
     }
-    polygon(0, 0, localPos ** 2.5 * maxDist + this.maxWeight * localPos, 7)
+    polygon(0, 0, localPos ** 5 * maxDist + this.maxWeight * localPos, 7)
     pop()
 
     return localPos > 1.0

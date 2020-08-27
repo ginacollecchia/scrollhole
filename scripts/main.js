@@ -27,7 +27,7 @@ function setup() {
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
 
-  infShapes.updateGroup(15)
+  infShapes.updateGroup(25)
 
   unmuteButton = createImg('./img/unmuteAudio.png')
   unmuteButton.size(50, 50)
