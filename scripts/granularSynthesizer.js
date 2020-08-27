@@ -13,33 +13,37 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
   this.toDestination = function () {
     grainPlayer.toDestination()
   }
-    
+
+  this.connect = function (node) {
+    grainPlayer.connect(node)
+  }
+
   this.isPlaying = false
   this.mute = function (mute) {
     grainPlayer.mute = mute
   }
-    
+
   this.pause = function(startTime) {
     let seekTime = Tone.now() - startTime
     this.stop()
     this.resumeTime = seekTime
     console.log("Pausing audio at ", seekTime)
   }
-  
+
   this.stop = function() {
     grainPlayer.stop("+0.5") // brief fade out
   }
-  
+
   this.start = function(resumeTime) {
     grainPlayer.start(0, resumeTime)
   }
-  
+
   this.playback = function(scrollSpeed, scrollSpeedSmoothed, startTime) {
     if (this.isPlaying) {
       this.isPlaying = false
       this.pause(startTime)
     }
-    
+
     grainPlayer.overlap = scrollSpeedSmoothed
     // make sure it's not too loud or too quiet
     // grainPlayer.volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
@@ -57,13 +61,13 @@ function GranularSynthesizer(buffer, playbackSpeed, reverse, volume, grainSize, 
     } else {
       grainPlayer.reverse = false
     }
-    
+
     console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", scrollSpeedSmoothed, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
-    
+
     if (!this.isPlaying) {
       this.isPlaying = true
       grainPlayer.start(0, resumeTime) // start it immediately and seek to resumeTime
     }
   }
-  
+
 }

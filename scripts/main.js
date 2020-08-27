@@ -1,18 +1,18 @@
 let isPlaying = false, isMuted = false
 let scrollSpeed = 0, scrollSpeedSmoothed = 0
-let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', '../audio/grass.mp3']
 let numRegions = 3
 let buffer = []
 let bgCol
 let center = { x:0, y:0 }
 let muteButton, unmuteButton
-let regionIdx = 0
+let regionIdx = 1
 let granularSynthesizer = []
 const startTime = Tone.now()
 var i
 
 function preload() {
-  for (i = 0; i < numRegions; i++) {
+  for (let i = 0; i < numRegions; i++) {
     buffer[i] = new Tone.Buffer(soundFiles[i])
   }
 }
@@ -41,15 +41,17 @@ function setup() {
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
   muteButton.show()
-  
+
   // granular synthesizer constructor: buffer, playback speed, reverse bool, volume, grain size, overlap, loop bool
   granularSynthesizer[0] = new GranularSynthesizer(buffer[0], 0.1, false, 0.5, 0.5, 0.5, true)
   granularSynthesizer[1] = new GranularSynthesizer(buffer[1], 1, false, 0.5, 0.5, 0.5, true)
   granularSynthesizer[2] = new GranularSynthesizer(buffer[2], 1, false, 0.5, 0.5, 0.5, true)
-  
+
+  const masterGain = new Tone.Gain()
   for (i = 0; i < numRegions; i++) {
-    granularSynthesizer[i].toDestination()
+    granularSynthesizer[i].connect(masterGain)
   }
+  masterGain.toDestination()
 
   var options = {
     preventDefault: true
@@ -74,7 +76,7 @@ function scrollZoom(event) {
   scrollSpeed = event.delta
   scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
   infShapes.scroll(scrollSpeed / 30000.0)
-  
+
   granularSynthesizer[regionIdx].playback(scrollSpeed, scrollSpeedSmoothed, startTime)
 }
 
@@ -87,7 +89,7 @@ function mouseWheel(event) {
 }
 
 function keyPressed(event) {
-  
+
 }
 
 function toggleMute() {
