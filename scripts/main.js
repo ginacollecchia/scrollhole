@@ -13,7 +13,8 @@ let granularSynthesizer = []
 let masterGain
 
 function preload() {
-  masterGain = new Tone.Gain()
+  masterGain = new Tone.Gain().toDestination()
+  console.log(masterGain)
 
   for (let i = 0; i < numRegions; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
@@ -24,8 +25,6 @@ function preload() {
       granularSynthesizer[i] = gs
     })
   }
-
-  masterGain.toDestination()
 }
 
 function setup() {
@@ -95,5 +94,9 @@ function keyPressed(event) {
 
 function toggleMute() {
   isMuted = !isMuted
-  masterGain.mute(isMuted)
+  if (isMuted) {
+    masterGain.gain.value = 0.0
+  } else {
+    masterGain.gain.value = 1.0
+  }
 }
