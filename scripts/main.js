@@ -1,6 +1,5 @@
 let isMuted = false, isStarted = false
-let scrollGlide = 0
-let numRegions = 3, regionIdx = 0
+let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
 let muteButton, unmuteButton, startButton, pauseButton, logo
@@ -9,6 +8,7 @@ const startTime = Tone.now()
 let gain = 0.9
 let position = 0
 let scroll = new Scroll(numRegions)
+let currentRegion = 0
 
 // tone nodes
 let granularSynthesizer = []
@@ -113,26 +113,20 @@ function scrollZoom(event) {
 
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
-  let currentRegion = regionIdx
-
-  position += scrollSpeed
-  if (position > 0) {
-    regionIdx = Math.floor(position/20000) % numRegions
-  } else {
-    regionIdx = Math.abs(Math.ceil(position/20000) % numRegions)
-  }
 
   // handle transition to a new region
-  if (currentRegion != regionIdx) {
-    granularSynthesizer[regionIdx].update(scrollSpeed, scrollSpeedSmoothed)
+  if (currentRegion != scroll.region) {
+    granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
     granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-    granularSynthesizer[regionIdx].fadeIn(2)
-    // console.log("Transitioning from region ", currentRegion, " to region ", regionIdx)
+    granularSynthesizer[scroll.region].fadeIn(2)
+
+    console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
   } else {
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
   }
 
+  currentRegion = scroll.region
 }
 
 function mouseWheel(event) {

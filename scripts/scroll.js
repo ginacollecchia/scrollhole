@@ -4,15 +4,16 @@ function Scroll(numRegions) {
   this.max = 0
   this.min = 0
   this.value = 0
-  this.speed = 1.5
+  this.speed = 1.25
   this.positive = false
   this.threshold = this.speed * 2
-  this.position = 0
   this.lastDelta = 0
   this.deltaMax = 500
 
   // distance to next region
-  this.distance = 20000
+  this.distance = 40000
+  this.position = this.distance / 2
+  this.region = 0
 
   this.scrollZoom = function(delta) {
     if (delta > this.deltaMax) {
@@ -29,6 +30,16 @@ function Scroll(numRegions) {
     if (delta < this.min) {
       this.min = delta
       this.positive = false
+    }
+  }
+
+  this.regionCheck = function() {
+    if (this.position > this.distance) {
+      this.region = (this.region + 1) % numRegions
+      this.position -= this.distance
+    } else if (this.position < 0) {
+      this.region = (((this.region - 1) % numRegions) + numRegions) % numRegions
+      this.position += this.distance
     }
   }
 
@@ -60,19 +71,7 @@ function Scroll(numRegions) {
     }
 
     this.position += this.value
-  }
-}
-
-function scrollControl() {
-  let threshold = 5
-  let increment = 1
-
-  if (scrollSpeed < -threshold && scrollSpeed != 0) {
-    scrollSpeed += increment
-  } else if(scrollSpeed > threshold && scrollSpeed != 0) {
-    scrollSpeed -= increment
-  } else {
-    scrollSpeed = 0
+    this.regionCheck()
   }
 }
 
