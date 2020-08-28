@@ -9,6 +9,11 @@ function Circle(i, g, maxDist) {
   this.color = 'black'
   this.maxWeight = 60
 
+  let centerXOffset = 0
+  let centerYOffset = 0
+  let wobble = 0.0
+  let wobbleSpeed = 0.01
+
   this.draw = function(pos, center) {
     let localPos = map(pos, this.origin, this.origin + 1.0, 0.0, 1.0)
 
@@ -23,9 +28,13 @@ function Circle(i, g, maxDist) {
     let scaledX = (mouseX - width * 0.5) / (width * 2.0)
     let scaledY = (mouseY - height * 0.5) / (height * 2.0)
 
+    wobble = (wobble + wobbleSpeed) % 1.0
+    centerXOffset = sin(wobble * 2 * PI) * 5 * localPos
+    centerYOffset = cos(wobble * 2 * PI) * 5 * localPos
+
     circle(
-      center.x + Math.sin(localPos * PI) * width * scaledX,
-      center.y + Math.sin(localPos * PI) * height * scaledY,
+      center.x + Math.sin(localPos * PI) * width * scaledX + centerXOffset,
+      center.y + Math.sin(localPos * PI) * height * scaledY + centerYOffset,
       localPos ** 2.5 * maxDist + this.maxWeight * localPos
     )
 
