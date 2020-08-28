@@ -104,9 +104,8 @@ function draw() {
 
   logo.show()
   infShapes.update()
-  infShapes.scroll(scroll.value / 30000)
+  infShapes.scroll(scroll.value / 50000)
   scroll.update()
-  console.log(scroll.value / 30000)
 }
 
 function scrollZoom(event) {
