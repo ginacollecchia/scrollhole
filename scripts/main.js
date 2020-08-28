@@ -114,7 +114,7 @@ function draw() {
 function scrollZoom(event) {
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
-  infShapes.scroll(scrollSpeed / 30000.0)
+  infShapes.scroll(scrollSpeed / 10000.0)
   let currentRegion = regionIdx
   
   position += scrollSpeed
