@@ -50,26 +50,26 @@ function setup() {
   logo.position(10, 10)
 
   // mute button
-  unmuteButton = createImg('./img/unmuteButtonPink.png')
+  unmuteButton = createImg('./img/unmuteButtonGreenBlack.png')
   unmuteButton.size(50, 50)
   unmuteButton.position(windowWidth - 70, 10)
   unmuteButton.mousePressed(toggleMute)
   unmuteButton.hide()
 
-  muteButton = createImg('./img/muteButtonPink.png')
+  muteButton = createImg('./img/muteButtonGreenBlack.png')
   muteButton.size(50, 50)
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
   muteButton.show()
   
   // start button
-  pauseButton = createImg('./img/pauseButtonPink.png')
+  pauseButton = createImg('./img/pauseButtonGreenBlack.png')
   pauseButton.size(50, 50)
   pauseButton.position(windowWidth - 130, 10)
   pauseButton.mousePressed(toggleStart)
   pauseButton.hide()
 
-  startButton = createImg('./img/playButtonPink.png')
+  startButton = createImg('./img/playButtonGreenBlack.png')
   startButton.size(50, 50)
   startButton.position(windowWidth - 130, 10)
   startButton.mousePressed(toggleStart)
