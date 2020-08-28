@@ -27,7 +27,7 @@ function GranularSynthesizer(buffer) {
     let seekTime = Tone.now() - startTime
     this.stop()
     this.resumeTime = seekTime
-    console.log("Pausing audio at ", seekTime)
+    // console.log("Pausing audio at ", seekTime)
   }
 
   this.stop = function() {
@@ -37,11 +37,11 @@ function GranularSynthesizer(buffer) {
   this.start = function(resumeTime) {
     grainPlayer.start(0, resumeTime)
   }
-  
+
   this.fadeOut = function(time) {
     grainPlayer.fadeOut = time
   }
-  
+
   this.fadeIn = function(time) {
     grainPlayer.fadeIn = time
   }
@@ -70,7 +70,7 @@ function GranularSynthesizer(buffer) {
       grainPlayer.reverse = false
     }
 
-    console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
+    //  console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
   }
 
 }

@@ -8,6 +8,7 @@ let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
+let scroll = new Scroll(numRegions)
 
 // tone nodes
 let granularSynthesizer = []
@@ -80,19 +81,6 @@ function setup() {
   }
 }
 
-function scrollControl() {
-  let threshold = 5
-  let increment = 1
-
-  if (scrollSpeed < -threshold && scrollSpeed != 0) {
-    scrollSpeed += increment
-  } else if(scrollSpeed > threshold && scrollSpeed != 0) {
-    scrollSpeed -= increment
-  } else {
-    scrollSpeed = 0
-  }
-}
-
 function draw() {
   background(bgCol)
   infShapes.draw(center)
@@ -115,12 +103,17 @@ function draw() {
   }
 
   logo.show()
+  infShapes.update()
+  infShapes.scroll(scroll.value / 30000)
+  scroll.update()
+  console.log(scroll.value / 30000)
 }
 
 function scrollZoom(event) {
+  scroll.scrollZoom(event.delta)
+
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
-  infShapes.scroll(scrollSpeed / 10000.0)
   let currentRegion = regionIdx
 
   position += scrollSpeed
@@ -136,12 +129,11 @@ function scrollZoom(event) {
     granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
     granularSynthesizer[regionIdx].fadeIn(2)
-    console.log("Transitioning from region ", currentRegion, " to region ", regionIdx)
+    // console.log("Transitioning from region ", currentRegion, " to region ", regionIdx)
   } else {
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
   }
 
-  scrollControl()
 }
 
 function mouseWheel(event) {
