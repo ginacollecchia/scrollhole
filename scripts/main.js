@@ -3,7 +3,7 @@ let scrollGlide = 0
 let numRegions = 3, regionIdx = 0
 let bgCol
 let center = { x:0, y:0 }
-let muteButton, unmuteButton, startButton, pauseButton
+let muteButton, unmuteButton, startButton, pauseButton, logo
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
@@ -44,6 +44,10 @@ function setup() {
   infShapes = new InfiniteShapes()
 
   infShapes.updateGroup(25)
+  // logo
+  logo = createImg('./img/scrollhole_logo.png')
+  logo.size(488, 75)
+  logo.position(10, 10)
 
   // mute button
   unmuteButton = createImg('./img/unmuteButtonPink.png')
@@ -109,6 +113,8 @@ function draw() {
     pauseButton.hide()
     startButton.show()
   }
+  
+  logo.show()
 }
 
 function scrollZoom(event) {
