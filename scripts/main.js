@@ -8,6 +8,7 @@ let muteButton, unmuteButton
 let regionIdx = 1
 let lastScrollSpeed = 0
 const startTime = Tone.now()
+let gain = 0.9
 
 // tone nodes
 let granularSynthesizer = []
@@ -15,9 +16,10 @@ let masterGain
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
-  let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+  // let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+  let soundFiles = ['./audio/stretching.mp3']
 
-  for (let i = 0; i < numRegions; i++) {
+  for (let i = 0; i < soundFiles.length; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
       let gs = new GranularSynthesizer(buffer)
       gs.connect(masterGain)
@@ -98,7 +100,8 @@ function scrollZoom(event) {
   scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
   infShapes.scroll(scrollSpeed / 30000.0)
 
-  lastScrollSpeed = scrollSpeed
+  granularSynthesizer[0].update(scrollSpeed, scrollSpeedSmoothed)
+  // granularSynthesizer[0].playback(scrollSpeed, scrollSpeedSmoothed)
 }
 
 function windowResized() {
@@ -110,6 +113,6 @@ function toggleMute() {
   if (isMuted) {
     masterGain.gain.value = 0.0
   } else {
-    masterGain.gain.value = 1.0
+    masterGain.gain.value = gain
   }
 }
