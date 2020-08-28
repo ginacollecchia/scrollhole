@@ -43,7 +43,7 @@ function setup() {
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
 
-  infShapes.updateGroup(25)
+  infShapes.updateGroup(15)
   // logo
   logo = createImg('./img/scrollhole_logo.png')
   logo.size(488, 75)
@@ -61,7 +61,7 @@ function setup() {
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
   muteButton.show()
-  
+
   // start button
   pauseButton = createImg('./img/pauseButtonGreenBlack.png')
   pauseButton.size(50, 50)
@@ -105,7 +105,7 @@ function draw() {
     unmuteButton.hide()
     muteButton.show()
   }
-  
+
   if (isStarted) {
     startButton.hide()
     pauseButton.show()
@@ -113,7 +113,7 @@ function draw() {
     pauseButton.hide()
     startButton.show()
   }
-  
+
   logo.show()
 }
 
@@ -122,14 +122,14 @@ function scrollZoom(event) {
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
   infShapes.scroll(scrollSpeed / 10000.0)
   let currentRegion = regionIdx
-  
+
   position += scrollSpeed
   if (position > 0) {
     regionIdx = Math.floor(position/20000) % numRegions
   } else {
     regionIdx = Math.abs(Math.ceil(position/20000) % numRegions)
   }
-  
+
   // handle transition to a new region
   if (currentRegion != regionIdx) {
     granularSynthesizer[regionIdx].update(scrollSpeed, scrollSpeedSmoothed)
@@ -171,5 +171,5 @@ function toggleStart() {
 }
 
 function triggerNewRegion(startRegion, endRegion) {
-  
+
 }
