@@ -9,11 +9,19 @@ function Scroll(numRegions) {
   this.threshold = this.speed * 2
   this.position = 0
   this.lastDelta = 0
+  this.deltaMax = 500
 
   // distance to next region
   this.distance = 20000
 
   this.scrollZoom = function(delta) {
+    if (delta > this.deltaMax) {
+      delta = this.deltaMax
+    }
+    if (delta < -this.deltaMax) {
+      delta = -this.deltaMax
+    }
+
     if (delta > this.max) {
       this.max = delta
       this.positive = true

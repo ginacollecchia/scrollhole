@@ -27,13 +27,6 @@ function InfiniteShapes() {
       }
     })
 
-    if (scrollSpeed > 0.03) {
-      scrollSpeed = 0.03
-    }
-    if (scrollSpeed < -0.03) {
-      scrollSpeed = -0.03
-    }
-
     pos += dir + scrollSpeed
 
     if (pos > 1.0) {
