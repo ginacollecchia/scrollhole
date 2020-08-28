@@ -4,7 +4,7 @@ function Scroll(numRegions) {
   this.max = 0
   this.min = 0
   this.value = 0
-  this.speed = 3
+  this.speed = 1.5
   this.positive = false
   this.threshold = this.speed * 2
   this.position = 0
@@ -36,7 +36,7 @@ function Scroll(numRegions) {
       if (this.max < 0) {
         this.max = 0
       }
-
+      this.min = 0
     } else {
       this.min += this.speed
       this.value = this.min
@@ -48,6 +48,7 @@ function Scroll(numRegions) {
       if (this.min > 0) {
         this.min = 0
       }
+      this.max = 0
     }
 
     this.position += this.value

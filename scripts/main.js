@@ -44,7 +44,7 @@ function setup() {
   center.y = height / 2.0
   infShapes = new InfiniteShapes()
 
-  infShapes.updateGroup(15)
+  infShapes.updateGroup(10)
   // logo
   logo = createImg('./img/scrollhole_logo.png')
   logo.size(488, 75)
