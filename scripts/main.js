@@ -2,6 +2,8 @@ let isMuted = false, isStarted = false
 let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
+let mouseCenter = { x:0, y:0 }
+
 let muteButton, unmuteButton, startButton, pauseButton, logo
 let scrollSpeed = 0
 const startTime = Tone.now()
@@ -9,6 +11,8 @@ let gain = 0.9
 let position = 0
 let scroll = new Scroll(numRegions)
 let currentRegion = 0
+
+let mouseFollow = { x: 0, y: 0 }
 
 // tone nodes
 let granularSynthesizer = []
@@ -40,8 +44,12 @@ function setup() {
   bgCol = color('white') // white
   textSize(22)
 
+
   center.x = width / 2.0
   center.y = height / 2.0
+
+  mouseFollow = center
+
   infShapes = new InfiniteShapes()
 
   infShapes.updateGroup(10)
@@ -83,7 +91,18 @@ function setup() {
 
 function draw() {
   background(bgCol)
-  infShapes.draw(center)
+
+  mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
+
+  let scaledX = (mouseFollow.x - width * 0.5) / (width * 2.0)
+  let scaledY = (mouseFollow.y - height * 0.5) / (height * 2.0)
+
+  let scaledCenter = {
+    x: scaledX,
+    y: scaledY,
+  }
+
+  infShapes.draw(center, scaledCenter)
   infShapes.update()
 
   if (isMuted) {
@@ -152,6 +171,13 @@ function toggleStart() {
     // Tone.stop()--not a thing
   } else {
     Tone.start()
+  }
+}
+
+function pointBetweenPoints(p1, p2, perc) {
+  return {
+    x: p1.x + perc * (p2.x - p1.x),
+    y: p1.y + perc * (p2.y - p1.y),
   }
 }
 

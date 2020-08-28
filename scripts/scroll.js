@@ -1,14 +1,14 @@
 // scroll.js
 
 function Scroll(numRegions) {
-  this.max = 0
+  this.max = 200
   this.min = 0
   this.value = 0
   this.speed = 1.25
-  this.positive = false
+  this.positive = true
   this.threshold = this.speed * 2
   this.lastDelta = 0
-  this.deltaMax = 500
+  this.deltaMax = 400
 
   // distance to next region
   this.distance = 40000

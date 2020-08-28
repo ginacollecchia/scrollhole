@@ -9,10 +9,10 @@ function InfiniteShapes() {
 
   let shapes = []
 
-  this.drawShapes = function(center) {
+  this.drawShapes = function(center, scaledCenter) {
     shapes.forEach(shape => {
       if (shape.visible == true) {
-        shape.draw(pos, center)
+        shape.draw(pos, center, scaledCenter)
       }
     })
   }
@@ -36,10 +36,6 @@ function InfiniteShapes() {
     }
   }
 
-  // this will respond to the mouse actions
-  this.updatePosition = function(p) {
-  }
-
   this.updateGroup = function(g) {
     for (let i = 0; i < g; i++) {
       shapes.push(
@@ -53,8 +49,8 @@ function InfiniteShapes() {
   }
 
   // put this in the draw loop
-  this.draw = function(center) {
-    this.drawShapes(center)
+  this.draw = function(center, scaledCenter) {
+    this.drawShapes(center, scaledCenter)
   }
 }
 
