@@ -6,7 +6,7 @@ function Circle(i, g, maxDist) {
   this.origin = (1.0 / g) * i + 1.0 / g * 0.5
   this.visible = false
   this.ready = false
-  this.color = 'red'
+  this.color = 'black'
   this.maxWeight = 60
 
   this.draw = function(pos, center) {

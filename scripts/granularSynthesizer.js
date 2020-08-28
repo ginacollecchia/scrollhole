@@ -6,7 +6,7 @@ function GranularSynthesizer(buffer) {
 
   grainPlayer.playbackRate = 1.0
   grainPlayer.reverse = false
-  grainPlayer.volume.value = 0
+  grainPlayer.volume.value = -65536
   grainPlayer.grainSize = 0.5
   grainPlayer.overlap = 0.5
   grainPlayer.loop = true
@@ -36,6 +36,14 @@ function GranularSynthesizer(buffer) {
 
   this.start = function(resumeTime) {
     grainPlayer.start(0, resumeTime)
+  }
+  
+  this.fadeOut = function(time) {
+    grainPlayer.fadeOut = time
+  }
+  
+  this.fadeIn = function(time) {
+    grainPlayer.fadeIn = time
   }
 
   this.update = function(scrollSpeed, scrollSpeedSmoothed) {
