@@ -1,8 +1,8 @@
-let resumeTime = 0
-let grainPlayer
+// granularSynthesizer.js
 
 function GranularSynthesizer(buffer) {
-  grainPlayer = new Tone.GrainPlayer(buffer)
+  let grainPlayer = new Tone.GrainPlayer(buffer)
+  let resumeTime = 0
 
   grainPlayer.playbackRate = 1.0
   grainPlayer.reverse = false
@@ -18,7 +18,7 @@ function GranularSynthesizer(buffer) {
   this.connect = function (node) {
     grainPlayer.connect(node)
   }
-  
+
   this.mute = function (mute) {
     grainPlayer.mute = mute
   }
@@ -44,6 +44,10 @@ function GranularSynthesizer(buffer) {
   
   this.fadeIn = function(time) {
     grainPlayer.fadeIn = time
+  }
+
+  this.scroll = function() {
+
   }
 
   this.update = function(scrollSpeed, scrollSpeedSmoothed) {

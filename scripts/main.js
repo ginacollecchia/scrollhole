@@ -4,6 +4,7 @@ let numRegions = 3, regionIdx = 0
 let bgCol
 let center = { x:0, y:0 }
 let muteButton, unmuteButton, startButton, pauseButton
+let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
@@ -15,8 +16,9 @@ let masterGain
 // mute button pink color RGB: 225, 100, 225
 
 function preload() {
-  masterGain = new Tone.Gain(gain).toDestination()
+  masterGain = new Tone.Gain().toDestination()
   let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+  // let soundFiles = ['./audio/stretching.mp3']
 
   for (let i = 0; i < soundFiles.length; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
@@ -24,7 +26,7 @@ function preload() {
       gs.connect(masterGain)
       gs.start(0)
 
-      granularSynthesizer[i] = gs
+      granularSynthesizer.push(gs)
     })
   }
 }
@@ -74,6 +76,19 @@ function setup() {
   }
 }
 
+function scrollControl() {
+  let threshold = 5
+  let increment = 1
+
+  if (scrollSpeed < -threshold && scrollSpeed != 0) {
+    scrollSpeed += increment
+  } else if(scrollSpeed > threshold && scrollSpeed != 0) {
+    scrollSpeed -= increment
+  } else {
+    scrollSpeed = 0
+  }
+}
+
 function draw() {
   background(bgCol)
   infShapes.draw(center)
@@ -97,7 +112,7 @@ function draw() {
 }
 
 function scrollZoom(event) {
-  let scrollSpeed = event.delta
+  scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
   infShapes.scroll(scrollSpeed / 30000.0)
   let currentRegion = regionIdx
@@ -119,18 +134,16 @@ function scrollZoom(event) {
   } else {
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
   }
-}
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  scrollControl()
 }
 
 function mouseWheel(event) {
   scrollZoom(event)
 }
 
-function keyPressed(event) {
-
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function toggleMute() {
