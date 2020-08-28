@@ -9,9 +9,14 @@ function InfiniteShapes() {
 
   let shapes = []
 
+  let wobbleScalar = 0.0
+  let wobbleSpeed = 0.01
+  let wobble = { x: 0.0, y: 0.0 }
+
   this.drawShapes = function(center, scaledCenter) {
     shapes.forEach(shape => {
       if (shape.visible == true) {
+        shape.update(wobble)
         shape.draw(pos, center, scaledCenter)
       }
     })
@@ -34,6 +39,11 @@ function InfiniteShapes() {
     } else if (pos < 0.0) {
       pos += 1.0
     }
+
+    wobbleScalar = (wobbleScalar + wobbleSpeed) % 1.0
+
+    wobble.x = Math.sin(wobbleScalar * 2 * PI)
+    wobble.y = Math.cos(wobbleScalar * 2 * PI)
   }
 
   this.updateGroup = function(g) {

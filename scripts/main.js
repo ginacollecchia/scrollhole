@@ -20,39 +20,38 @@ let masterGain
 
 // mute button pink color RGB: 225, 100, 225
 
-function preload() {
-  masterGain = new Tone.Gain().toDestination()
-  let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
-  // let soundFiles = ['./audio/stretching.mp3']
+// function preload() {
+//   masterGain = new Tone.Gain().toDestination()
+//   let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+//   // let soundFiles = ['./audio/stretching.mp3']
 
-  for (let i = 0; i < soundFiles.length; i++) {
-    let buffer = new Tone.Buffer(soundFiles[i], function() {
-      let gs = new GranularSynthesizer(buffer)
-      gs.connect(masterGain)
-      gs.start(0)
+//   for (let i = 0; i < soundFiles.length; i++) {
+//     let buffer = new Tone.Buffer(soundFiles[i], function() {
+//       let gs = new GranularSynthesizer(buffer)
+//       gs.connect(masterGain)
+//       gs.start(0)
 
-      granularSynthesizer.push(gs)
-    })
-  }
-}
+//       granularSynthesizer.push(gs)
+//     })
+//   }
+// }
 
 function setup() {
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
+  frameRate(40)
 
   // bgCol = color(207, 236, 207) // minty
   bgCol = color('white') // white
   textSize(22)
 
-
   center.x = width / 2.0
   center.y = height / 2.0
-
   mouseFollow = center
 
   infShapes = new InfiniteShapes()
 
-  infShapes.updateGroup(10)
+  infShapes.updateGroup(7)
   // logo
   logo = createImg('./img/scrollhole_logo.png')
   logo.size(488, 75)
@@ -94,16 +93,14 @@ function draw() {
 
   mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
 
-  let scaledX = (mouseFollow.x - width * 0.5) / (width * 2.0)
-  let scaledY = (mouseFollow.y - height * 0.5) / (height * 2.0)
+  let scaledX = (mouseFollow.x / width - 0.5)
+  let scaledY = (mouseFollow.y / height - 0.5)
 
   let scaledCenter = {
     x: scaledX,
     y: scaledY,
   }
 
-  infShapes.draw(center, scaledCenter)
-  infShapes.update()
 
   if (isMuted) {
     muteButton.hide()
@@ -122,8 +119,11 @@ function draw() {
   }
 
   logo.show()
+
+  infShapes.draw(center, scaledCenter)
   infShapes.update()
   infShapes.scroll(scroll.value / 50000)
+
   scroll.update()
 }
 
@@ -133,17 +133,17 @@ function scrollZoom(event) {
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
 
-  // handle transition to a new region
-  if (currentRegion != scroll.region) {
-    granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
-    granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
-    granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-    granularSynthesizer[scroll.region].fadeIn(2)
+  // // handle transition to a new region
+  // if (currentRegion != scroll.region) {
+  //   granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
+  //   granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
+  //   granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
+  //   granularSynthesizer[scroll.region].fadeIn(2)
 
-    console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
-  } else {
-    granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-  }
+  //   console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
+  // } else {
+  //   granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
+  // }
 
   currentRegion = scroll.region
 }
