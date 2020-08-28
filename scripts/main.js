@@ -1,20 +1,21 @@
 let isPlaying = false, isMuted = false
 let scrollSpeed = 0, scrollSpeedSmoothed = 0
 let scrollGlide = 0
-let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
 let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
 let muteButton, unmuteButton
 let regionIdx = 1
+let lastScrollSpeed = 0
 const startTime = Tone.now()
 
+// tone nodes
 let granularSynthesizer = []
 let masterGain
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
-  console.log(masterGain)
+  let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
 
   for (let i = 0; i < numRegions; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
@@ -22,7 +23,7 @@ function preload() {
       gs.connect(masterGain)
       gs.start(0)
 
-      granularSynthesizer[i] = gs
+      granularSynthesizer.push(gs)
     })
   }
 }
@@ -58,6 +59,19 @@ function setup() {
   }
 }
 
+function scrollControl() {
+  let threshold = 5
+  let increment = 1
+
+  if (scrollSpeed < -threshold && scrollSpeed != 0) {
+    scrollSpeed += increment
+  } else if(scrollSpeed > threshold && scrollSpeed != 0) {
+    scrollSpeed -= increment
+  } else {
+    scrollSpeed = 0
+  }
+}
+
 function draw() {
   background(bgCol)
   infShapes.draw(center)
@@ -70,26 +84,25 @@ function draw() {
     unmuteButton.hide()
     muteButton.show()
   }
-}
 
-function scrollZoom(event) {
-  scrollSpeed = event.delta
-  scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
-
-  infShapes.scroll(scrollSpeed / 30000.0)
-  // granularSynthesizer[0].playback(scrollSpeed, scrollSpeedSmoothed)
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  scrollControl()
 }
 
 function mouseWheel(event) {
   scrollZoom(event)
 }
 
-function keyPressed(event) {
+function scrollZoom(event) {
+  scrollSpeed = event.delta
 
+  scrollSpeedSmoothed = Math.log(abs(scrollSpeed) + 1)
+  infShapes.scroll(scrollSpeed / 30000.0)
+
+  lastScrollSpeed = scrollSpeed
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function toggleMute() {

@@ -4,7 +4,7 @@ function InfiniteShapes() {
   let maxDist = dist(0, 0, width, height)
 
   let pos = 0.00
-  let dir = 0.003
+  let dir = 0.00
   let scrollSpeed = 0.0
 
   let shapes = []
