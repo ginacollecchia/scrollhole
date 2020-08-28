@@ -20,21 +20,21 @@ let masterGain
 
 // mute button pink color RGB: 225, 100, 225
 
-// function preload() {
-//   masterGain = new Tone.Gain().toDestination()
-//   let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
-//   // let soundFiles = ['./audio/stretching.mp3']
+function preload() {
+  masterGain = new Tone.Gain().toDestination()
+  let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+  // let soundFiles = ['./audio/stretching.mp3']
 
-//   for (let i = 0; i < soundFiles.length; i++) {
-//     let buffer = new Tone.Buffer(soundFiles[i], function() {
-//       let gs = new GranularSynthesizer(buffer)
-//       gs.connect(masterGain)
-//       gs.start(0)
+  for (let i = 0; i < soundFiles.length; i++) {
+    let buffer = new Tone.Buffer(soundFiles[i], function() {
+      let gs = new GranularSynthesizer(buffer)
+      gs.connect(masterGain)
+      gs.start(0)
 
-//       granularSynthesizer.push(gs)
-//     })
-//   }
-// }
+      granularSynthesizer.push(gs)
+    })
+  }
+}
 
 function setup() {
   let cvn = createCanvas(windowWidth, windowHeight)
@@ -133,17 +133,17 @@ function scrollZoom(event) {
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
 
-  // // handle transition to a new region
-  // if (currentRegion != scroll.region) {
-  //   granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
-  //   granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
-  //   granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-  //   granularSynthesizer[scroll.region].fadeIn(2)
+  // handle transition to a new region
+  if (currentRegion != scroll.region) {
+    granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
+    granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
+    granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
+    granularSynthesizer[scroll.region].fadeIn(2)
 
-  //   console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
-  // } else {
-  //   granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-  // }
+    console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
+  } else {
+    granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
+  }
 
   currentRegion = scroll.region
 }
