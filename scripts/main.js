@@ -4,12 +4,12 @@ let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 
-let muteButton, unmuteButton, startButton, pauseButton, logo
+let muteButton, unmuteButton, clickForSound, logo, eighties_font
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
-let scroll = new Scroll(numRegions)
+let scroll = new Scroll(numRegions) // is scroll overloaded?
 let currentRegion = 0
 
 let mouseFollow = { x: 0, y: 0 }
@@ -34,6 +34,10 @@ function preload() {
       granularSynthesizer.push(gs)
     })
   }
+  
+  eighties_font = loadFont('./fonts/effects-eighty.otf', function() {
+    console.log('loaded font', eighties_font)
+  })
 }
 
 function setup() {
@@ -70,18 +74,14 @@ function setup() {
   muteButton.mousePressed(toggleMute)
   muteButton.show()
 
-  // start button
-  pauseButton = createImg('./img/pauseButtonGreenBlack.png')
-  pauseButton.size(50, 50)
-  pauseButton.position(windowWidth - 130, 10)
-  pauseButton.mousePressed(toggleStart)
-  pauseButton.hide()
-
-  startButton = createImg('./img/playButtonGreenBlack.png')
-  startButton.size(50, 50)
-  startButton.position(windowWidth - 130, 10)
-  startButton.mousePressed(toggleStart)
-  startButton.show()
+  // start audio dialog
+  clickForSound = createDiv('click anywhere to start sound!')
+  // clickForSound.style('font-family', 'EffectsEighty')
+  clickForSound.style('font-family', 'Courier')
+  clickForSound.style('text-align', 'center')
+  clickForSound.style('color', 'black')
+  clickForSound.style('font-size', '24px')
+  clickForSound.position(520, 25)
 
   var options = {
     preventDefault: true
@@ -109,20 +109,18 @@ function draw() {
     unmuteButton.hide()
     muteButton.show()
   }
-
-  if (isStarted) {
-    startButton.hide()
-    pauseButton.show()
+  
+  if (!isStarted) {
+    clickForSound.show()
   } else {
-    pauseButton.hide()
-    startButton.show()
+    clickForSound.hide()
   }
-
+  
   logo.show()
 
   infShapes.draw(center, scaledCenter)
   infShapes.update()
-  infShapes.scroll(scroll.value / 50000)
+  infShapes.scroll(scroll.value / 20000)
 
   scroll.update()
 }
@@ -165,13 +163,12 @@ function toggleMute() {
   }
 }
 
-function toggleStart() {
-  isStarted = !isStarted
+function mouseClicked() {
   if (!isStarted) {
-    // Tone.stop()--not a thing
-  } else {
+    isStarted = !isStarted
     Tone.start()
-  }
+    clickForSound.hide()
+  } 
 }
 
 function pointBetweenPoints(p1, p2, perc) {
