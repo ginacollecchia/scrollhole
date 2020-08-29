@@ -4,12 +4,12 @@ let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 
-let muteButton, unmuteButton, startButton, pauseButton, logo
+let muteButton, unmuteButton, clickForSound, logo, eighties_font, aboutButton
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
-let scroll = new Scroll(numRegions)
+let scroll = new Scroll(numRegions) // is scroll overloaded?
 let currentRegion = 0
 
 let mouseFollow = { x: 0, y: 0 }
@@ -34,6 +34,10 @@ function preload() {
       granularSynthesizer.push(gs)
     })
   }
+
+  eighties_font = loadFont('./fonts/effects-eighty.otf', function() {
+    console.log('loaded font', eighties_font)
+  })
 }
 
 function setup() {
@@ -62,26 +66,26 @@ function setup() {
   unmuteButton.size(50, 50)
   unmuteButton.position(windowWidth - 70, 10)
   unmuteButton.mousePressed(toggleMute)
-  unmuteButton.hide()
 
   muteButton = createImg('./img/muteButtonGreenBlack.png')
   muteButton.size(50, 50)
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
-  muteButton.show()
 
-  // start button
-  pauseButton = createImg('./img/pauseButtonGreenBlack.png')
-  pauseButton.size(50, 50)
-  pauseButton.position(windowWidth - 130, 10)
-  pauseButton.mousePressed(toggleStart)
-  pauseButton.hide()
+  // start audio dialog
+  clickForSound = createDiv('click anywhere to start sound!')
+  // clickForSound.style('font-family', 'EffectsEighty') // no worky...
+  clickForSound.style('font-family', 'Courier')
+  clickForSound.style('text-align', 'center')
+  clickForSound.style('color', 'black')
+  clickForSound.style('font-size', '18px')
+  clickForSound.position(520, 30)
 
-  startButton = createImg('./img/playButtonGreenBlack.png')
-  startButton.size(50, 50)
-  startButton.position(windowWidth - 130, 10)
-  startButton.mousePressed(toggleStart)
-  startButton.show()
+  // about link
+  aboutButton = createImg('./img/what.png')
+  aboutButton.size(80, 30)
+  aboutButton.position(windowWidth - 170, 20)
+  aboutButton.mousePressed(showAboutModalDialog)
 
   var options = {
     preventDefault: true
@@ -110,15 +114,15 @@ function draw() {
     muteButton.show()
   }
 
-  if (isStarted) {
-    startButton.hide()
-    pauseButton.show()
+  if (!isStarted) {
+    clickForSound.show()
   } else {
-    pauseButton.hide()
-    startButton.show()
+    clickForSound.hide()
   }
 
   logo.show()
+
+  aboutButton.show()
 
   infShapes.draw(center, scaledCenter)
   infShapes.update(scroll.regionPosition, scroll.regionIdx)
@@ -165,12 +169,15 @@ function toggleMute() {
   }
 }
 
-function toggleStart() {
-  isStarted = !isStarted
+function showAboutModalDialog() {
+
+}
+
+function mouseClicked() {
   if (!isStarted) {
-    // Tone.stop()--not a thing
-  } else {
+    isStarted = !isStarted
     Tone.start()
+    clickForSound.hide()
   }
 }
 
