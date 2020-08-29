@@ -14,6 +14,7 @@ function Scroll(numRegions) {
   this.distance = 40000
   this.position = this.distance / 2
   this.region = 0
+  this.regionPosition = 0.0
 
   this.scrollZoom = function(delta) {
     delta *= 8
@@ -72,6 +73,7 @@ function Scroll(numRegions) {
     }
 
     this.position += this.value
+    this.regionPosition = this.position / this.distance
     this.regionCheck()
   }
 }

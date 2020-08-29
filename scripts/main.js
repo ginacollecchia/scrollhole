@@ -121,7 +121,7 @@ function draw() {
   logo.show()
 
   infShapes.draw(center, scaledCenter)
-  infShapes.update()
+  infShapes.update(scroll.regionPosition, scroll.regionIdx)
   infShapes.scroll(scroll.value / 50000)
 
   scroll.update()
