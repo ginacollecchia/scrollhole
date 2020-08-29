@@ -4,7 +4,7 @@ let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 
-let muteButton, unmuteButton, clickForSound, logo, eighties_font
+let muteButton, unmuteButton, clickForSound, logo, eighties_font, aboutButton
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
@@ -66,22 +66,26 @@ function setup() {
   unmuteButton.size(50, 50)
   unmuteButton.position(windowWidth - 70, 10)
   unmuteButton.mousePressed(toggleMute)
-  unmuteButton.hide()
 
   muteButton = createImg('./img/muteButtonGreenBlack.png')
   muteButton.size(50, 50)
   muteButton.position(windowWidth - 70, 10)
   muteButton.mousePressed(toggleMute)
-  muteButton.show()
 
   // start audio dialog
   clickForSound = createDiv('click anywhere to start sound!')
-  // clickForSound.style('font-family', 'EffectsEighty')
+  // clickForSound.style('font-family', 'EffectsEighty') // no worky...
   clickForSound.style('font-family', 'Courier')
   clickForSound.style('text-align', 'center')
   clickForSound.style('color', 'black')
-  clickForSound.style('font-size', '24px')
-  clickForSound.position(520, 25)
+  clickForSound.style('font-size', '18px')
+  clickForSound.position(520, 30)
+  
+  // about link
+  aboutButton = createImg('./img/what.png')
+  aboutButton.size(80, 30)
+  aboutButton.position(windowWidth - 170, 20)
+  aboutButton.mousePressed(showAboutModalDialog)
 
   var options = {
     preventDefault: true
@@ -117,6 +121,8 @@ function draw() {
   }
   
   logo.show()
+  
+  aboutButton.show()
 
   infShapes.draw(center, scaledCenter)
   infShapes.update()
@@ -161,6 +167,10 @@ function toggleMute() {
   } else {
     masterGain.gain.value = gain
   }
+}
+
+function showAboutModalDialog() {
+  
 }
 
 function mouseClicked() {
