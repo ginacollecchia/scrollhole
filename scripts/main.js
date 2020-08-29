@@ -3,6 +3,7 @@ let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
+let scaledCenter = { x:0.0, y:0.0 }
 
 let muteButton, unmuteButton, clickForSound, logo, eighties_font, aboutButton
 let scrollSpeed = 0
@@ -97,14 +98,8 @@ function draw() {
 
   mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
 
-  let scaledX = (mouseFollow.x / width - 0.5)
-  let scaledY = (mouseFollow.y / height - 0.5)
-
-  let scaledCenter = {
-    x: scaledX,
-    y: scaledY,
-  }
-
+  scaledCenter.x = (mouseFollow.x / width - 0.5)
+  scaledCenter.y = (mouseFollow.y / height - 0.5)
 
   if (isMuted) {
     muteButton.hide()
@@ -121,7 +116,6 @@ function draw() {
   }
 
   logo.show()
-
   aboutButton.show()
 
   infShapes.draw(center, scaledCenter)

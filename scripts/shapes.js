@@ -15,7 +15,7 @@ function Circle(i, g, maxDist) {
     wobble = w
   }
 
-  this.draw = function(pos, center, scaledCenter) {
+  this.draw = function(pos, sinPos, center, scaledCenter) {
     let localPos = map(pos, this.origin, this.origin + 1.0, 0.0, 1.0)
 
     if (localPos < 0.0) {
@@ -23,7 +23,7 @@ function Circle(i, g, maxDist) {
     }
 
     noFill()
-    strokeWeight(localPos ** 2.5 * this.maxWeight * localPos)
+    strokeWeight(localPos ** 2.5 * this.maxWeight * localPos + 10 * sinPos)
     stroke(this.color)
 
     let curve = Math.sin(localPos * PI)

@@ -15,6 +15,9 @@ function Scroll(numRegions) {
   this.position = this.distance / 2
   this.region = 0
   this.regionPosition = 0.0
+  this.gain = 0.0
+
+  const clampNumber = (num, a, b) => Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b))
 
   this.scrollZoom = function(delta) {
     delta *= 8
@@ -43,6 +46,10 @@ function Scroll(numRegions) {
       this.region = (((this.region - 1) % numRegions) + numRegions) % numRegions
       this.position += this.distance
     }
+  }
+
+  this.gainCheck = function() {
+    this.gain = sin(PI * this.regionPosition)
   }
 
   this.update = function() {
@@ -75,6 +82,8 @@ function Scroll(numRegions) {
     this.position += this.value
     this.regionPosition = this.position / this.distance
     this.regionCheck()
+    this.gainCheck()
+    console.log(this.regionPosition, this.gain)
   }
 }
 
