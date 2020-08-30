@@ -46,7 +46,6 @@ function preload() {
 }
 
 function setup() {
-  console.log(granularGains)
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
   frameRate(40)
@@ -121,6 +120,7 @@ function draw() {
   infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
+  console.log(scrollingState)
 }
 
 function mousePressed() {
@@ -129,7 +129,6 @@ function mousePressed() {
 
 function scrollZoom(event) {
   scroll.scrollZoom(event.delta)
-  console.log(scroll.value)
 
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
@@ -141,7 +140,7 @@ function scrollZoom(event) {
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
     // granularSynthesizer[scroll.region].fadeIn(2)
 
-    console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
+    // console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
   } else {
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
   }
@@ -179,3 +178,6 @@ function pointBetweenPoints(p1, p2, perc) {
     y: p1.y + perc * (p2.y - p1.y),
   }
 }
+
+
+
