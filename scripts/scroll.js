@@ -2,7 +2,6 @@
 
 function Scroll(numRegions) {
   this.max = 600
-  this.max = 0
   this.min = 0
   this.value = 0
   this.speed = 5
@@ -20,13 +19,17 @@ function Scroll(numRegions) {
   this.regionPosition = 0.0
   this.halfway = this.distance * 0.5
   this.transitionSpace = .10
+  this.stopped = false
 
   this.regionGain = 1.0
   this.nextRegionGain = 0.0
 
   const clampNumber = (num, a, b) => Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b))
 
+  let lastDelta = 0
+
   this.scrollZoom = function(delta) {
+    this.stopped = false
     delta *= 8
     if (delta > this.deltaMax) {
       delta = this.deltaMax
@@ -90,6 +93,7 @@ function Scroll(numRegions) {
       this.value = this.max
 
       if (this.value < this.threshold) {
+        this.stopped = true
         this.value = 0
       }
 
@@ -103,6 +107,7 @@ function Scroll(numRegions) {
 
       if (this.value > -this.threshold) {
         this.value = 0
+        this.stopped = true
       }
 
       if (this.min > 0) {

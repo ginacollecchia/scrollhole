@@ -47,11 +47,7 @@ function Circle(i, g, maxDist) {
     this.x = center.x + curve * width * scaledCenter.x + wobble.x
     this.y = center.y + curve * height * scaledCenter.y + wobble.y,
 
-    circle(
-      this.x,
-      this.y,
-      this.diameter
-    )
+    circle(this.x, this.y, this.diameter)
   }
 }
 
@@ -135,5 +131,8 @@ function Arcs() {
     strokeWeight(this.weight)
     stroke(this.color)
 
+    arc(0, width
+
+    )
   }
 }

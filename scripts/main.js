@@ -92,7 +92,7 @@ function draw() {
   infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
-  
+
   // handle transition to a new region
   if (scroll.inTransition && granularSynthesizer[scroll.region] && granularSynthesizer[scroll.nextRegion] && !scroll.stopped) {
     // console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
@@ -172,3 +172,6 @@ function pointBetweenPoints(p1, p2, perc) {
     y: p1.y + perc * (p2.y - p1.y),
   }
 }
+
+
+
