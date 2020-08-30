@@ -12,17 +12,21 @@ function InfiniteShapes() {
   let wobbleScalar = 0.0
   let wobbleSpeed = 0.01
   let wobble = { x: 0.0, y: 0.0 }
+  this.regionPos = 0.0
 
   this.drawShapes = function(center, scaledCenter) {
+    let sinPos = sin(this.regionPos * PI)
     shapes.forEach(shape => {
       if (shape.visible == true) {
         shape.update(wobble)
-        shape.draw(pos, center, scaledCenter)
+        shape.draw(pos, sinPos, center, scaledCenter)
       }
     })
   }
 
-  this.update = function() {
+  this.update = function(regionPos, index) {
+    this.regionPos = regionPos
+
     shapes.forEach(shape => {
       if (pos < shape.origin && shape.ready == false) {
         shape.ready = true

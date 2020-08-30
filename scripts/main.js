@@ -3,6 +3,7 @@ let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
+let scaledCenter = { x:0.0, y:0.0 }
 
 let muteButton, unmuteButton, clickForSound, logo, eightiesFont
 let scrollSpeed = 0
@@ -36,9 +37,7 @@ function preload() {
     })
   }
   
-  eightiesFont = loadFont('./fonts/effects-eighty.otf', function() {
-    // console.log('loaded font', eightiesFont)
-  })
+  eightiesFont = loadFont('./fonts/effects-eighty.otf')
 }
 
 function setup() {
@@ -75,13 +74,12 @@ function setup() {
 
   // start audio dialog
   clickForSound = createDiv('click anywhere to start sound!')
-  // clickForSound.style('font-family', 'EffectsEighty') // no worky...
   clickForSound.style('font-family', 'EffectsEighty')
   clickForSound.style('text-align', 'center')
   clickForSound.style('color', 'black')
   clickForSound.style('font-size', '18px')
   clickForSound.position(520, 30)
-    
+
   var options = {
     preventDefault: true
   }
@@ -92,14 +90,8 @@ function draw() {
 
   mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
 
-  let scaledX = (mouseFollow.x / width - 0.5)
-  let scaledY = (mouseFollow.y / height - 0.5)
-
-  let scaledCenter = {
-    x: scaledX,
-    y: scaledY,
-  }
-
+  scaledCenter.x = (mouseFollow.x / width - 0.5)
+  scaledCenter.y = (mouseFollow.y / height - 0.5)
 
   if (isMuted) {
     muteButton.hide()
@@ -108,18 +100,18 @@ function draw() {
     unmuteButton.hide()
     muteButton.show()
   }
-  
+
   if (!isStarted) {
     clickForSound.show()
   } else {
     clickForSound.hide()
   }
-  
+
   logo.show()
-  
+
   infShapes.draw(center, scaledCenter)
-  infShapes.update()
-  infShapes.scroll(scroll.value / 20000)
+  infShapes.update(scroll.regionPosition, scroll.regionIdx)
+  infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
 }
