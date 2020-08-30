@@ -1,16 +1,16 @@
-let isMuted = false, isStarted = false
+let isMuted = false
 let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 let scaledCenter = { x:0.0, y:0.0 }
 
-let muteButton, unmuteButton, clickForSound, logo, eighties_font, aboutButton
+let muteButton, unmuteButton, clickForSound, logo, eightiesFont
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
-let scroll = new Scroll(numRegions) // is scroll overloaded?
+let scroll = new Scroll(numRegions)
 let currentRegion = 0
 
 let mouseFollow = { x: 0, y: 0 }
@@ -41,10 +41,8 @@ function preload() {
       granularSynthesizer.push(gs)
     })
   }
-
-  eighties_font = loadFont('./fonts/effects-eighty.otf', function() {
-    console.log('loaded font', eighties_font)
-  })
+  
+  eightiesFont = loadFont('./fonts/effects-eighty.otf')
 }
 
 function setup() {
@@ -65,7 +63,7 @@ function setup() {
 
   infShapes.updateGroup(7)
   // logo
-  logo = createImg('./img/scrollhole_logo.png')
+  logo = createImg('./img/scrollholeLogo.png')
   logo.size(488, 75)
   logo.position(10, 10)
 
@@ -82,19 +80,13 @@ function setup() {
 
   // start audio dialog
   clickForSound = createDiv('click anywhere to start sound!')
-  // clickForSound.style('font-family', 'EffectsEighty') // no worky...
-  clickForSound.style('font-family', 'Courier')
+  clickForSound.style('font-family', 'Monaco') // fallback font
+  clickForSound.style('font-family', 'EffectsEighty')
   clickForSound.style('text-align', 'center')
   clickForSound.style('color', 'black')
   clickForSound.style('font-size', '18px')
   clickForSound.position(520, 30)
-
-  // about link
-  aboutButton = createImg('./img/what.png')
-  aboutButton.size(80, 30)
-  aboutButton.position(windowWidth - 170, 20)
-  aboutButton.mousePressed(showAboutModalDialog)
-
+  
   var options = {
     preventDefault: true
   }
@@ -116,18 +108,17 @@ function draw() {
     muteButton.show()
   }
 
-  if (!isStarted) {
+  if (Tone.context.state !== 'running') {
     clickForSound.show()
   } else {
     clickForSound.hide()
   }
 
   logo.show()
-  aboutButton.show()
 
   infShapes.draw(center, scaledCenter)
   infShapes.update(scroll.regionPosition, scroll.regionIdx)
-  infShapes.scroll(scroll.value / 50000)
+  infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
 }
@@ -158,6 +149,12 @@ function mouseWheel(event) {
   scrollZoom(event)
 }
 
+function mouseClicked() {
+  if (Tone.context.state !== 'running') {
+    Tone.start()
+  } 
+}
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -171,25 +168,9 @@ function toggleMute() {
   }
 }
 
-function showAboutModalDialog() {
-
-}
-
-function mouseClicked() {
-  if (!isStarted) {
-    isStarted = !isStarted
-    Tone.start()
-    clickForSound.hide()
-  }
-}
-
 function pointBetweenPoints(p1, p2, perc) {
   return {
     x: p1.x + perc * (p2.x - p1.x),
     y: p1.y + perc * (p2.y - p1.y),
   }
-}
-
-function triggerNewRegion(startRegion, endRegion) {
-
 }
