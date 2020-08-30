@@ -12,6 +12,7 @@ let mouseFollow = { x: 0, y: 0 }
 
 // tone nodes
 let granularSynthesizer = []
+let granularGains = []
 let masterGain
 
 let muteButton, unmuteButton, clickForSound, logo // images
@@ -26,9 +27,14 @@ function preload() {
   for (let i = 0; i < soundFiles.length; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
       let gs = new GranularSynthesizer(buffer)
-      gs.connect(masterGain)
+      let gg = new Tone.Gain()
+      gg.gain.value = 0.0
+
+      gs.connect(gg)
+      gg.connect(masterGain)
       gs.start(0)
 
+      granularGains.push(gg)
       granularSynthesizer.push(gs)
     })
   }
@@ -37,6 +43,7 @@ function preload() {
 }
 
 function setup() {
+  console.log(granularGains)
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
   frameRate(40)
@@ -123,16 +130,17 @@ function scrollZoom(event) {
   // handle transition to a new region
   if (currentRegion != scroll.region) {
     granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
-    granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
+    // granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-    granularSynthesizer[scroll.region].fadeIn(2)
+    // granularSynthesizer[scroll.region].fadeIn(2)
 
     console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
   } else {
     granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
   }
 
-  currentRegion = scroll.region
+  granularGains[scroll.region].gain.value = scroll.regionGain
+  granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
 }
 
 function mouseWheel(event) {
