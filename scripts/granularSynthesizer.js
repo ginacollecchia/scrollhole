@@ -69,11 +69,10 @@ function GranularSynthesizer(buffer) {
     }*/
     grainPlayer.overlap = Math.abs(scrollSpeed)/200
     // map(value, start1, stop1, start2, stop2, [withinBounds])
-    grainPlayer.grainSize = 2.5/scrollSpeedSmoothed + 0.01
-    grainPlayer.playbackRate = Math.abs(scrollSpeed)/100 + 0.01
+    grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01
+    grainPlayer.playbackRate = Math.abs(scrollSpeed)/200 + 0.01
     if (scrollSpeed < 0) {
       grainPlayer.reverse = true
-      // scrollSpeedSmoothed *= -1
     } else {
       grainPlayer.reverse = false
     }
