@@ -103,7 +103,7 @@ function draw() {
 
     console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
   } else {
-    granularSynthesizer[currentRegion].update(scroll.value)
+    granularSynthesizer[scroll.region].update(scroll.value)
   }
   
 }
