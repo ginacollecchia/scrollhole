@@ -1,17 +1,12 @@
-let isMuted = false
-let numRegions = 3
-let bgCol
+let numRegions = 3, currentRegion = 0
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 let scaledCenter = { x:0.0, y:0.0 }
-
-let muteButton, unmuteButton, clickForSound, logo, eightiesFont
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
 let scroll = new Scroll(numRegions)
-let currentRegion = 0
 
 let mouseFollow = { x: 0, y: 0 }
 
@@ -19,7 +14,9 @@ let mouseFollow = { x: 0, y: 0 }
 let granularSynthesizer = []
 let masterGain
 
-// mute button pink color RGB: 225, 100, 225
+let muteButton, unmuteButton, clickForSound, logo // images
+let isMuted = false
+
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
@@ -36,17 +33,13 @@ function preload() {
     })
   }
   
-  eightiesFont = loadFont('./fonts/effects-eighty.otf')
+  loadFont('./fonts/effects-eighty.otf')
 }
 
 function setup() {
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
   frameRate(40)
-
-  // bgCol = color(207, 236, 207) // minty
-  bgCol = color('white') // white
-  textSize(22)
 
   center.x = width / 2.0
   center.y = height / 2.0
@@ -55,30 +48,8 @@ function setup() {
   infShapes = new InfiniteShapes()
 
   infShapes.updateGroup(7)
-  // logo
-  logo = createImg('./img/scrollholeLogo.png')
-  logo.size(488, 75)
-  logo.position(10, 10)
-
-  // mute button
-  unmuteButton = createImg('./img/unmuteButtonGreenBlack.png')
-  unmuteButton.size(50, 50)
-  unmuteButton.position(windowWidth - 70, 10)
-  unmuteButton.mousePressed(toggleMute)
-
-  muteButton = createImg('./img/muteButtonGreenBlack.png')
-  muteButton.size(50, 50)
-  muteButton.position(windowWidth - 70, 10)
-  muteButton.mousePressed(toggleMute)
-
-  // start audio dialog
-  clickForSound = createDiv('click anywhere to start sound!')
-  clickForSound.style('font-family', 'Monaco') // fallback font
-  clickForSound.style('font-family', 'EffectsEighty')
-  clickForSound.style('text-align', 'center')
-  clickForSound.style('color', 'black')
-  clickForSound.style('font-size', '18px')
-  clickForSound.position(520, 30)
+  
+  loadImages()
   
   var options = {
     preventDefault: true
@@ -86,7 +57,7 @@ function setup() {
 }
 
 function draw() {
-  background(bgCol)
+  background('white')
 
   mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
 
@@ -114,6 +85,33 @@ function draw() {
   infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
+}
+
+function loadImages() {
+  // logo
+  logo = createImg('./img/scrollholeLogo.png')
+  logo.size(488, 75)
+  logo.position(10, 10)
+
+  // mute button
+  unmuteButton = createImg('./img/unmuteButtonGreenBlack.png')
+  unmuteButton.size(50, 50)
+  unmuteButton.position(windowWidth - 70, 10)
+  unmuteButton.mousePressed(toggleMute)
+
+  muteButton = createImg('./img/muteButtonGreenBlack.png')
+  muteButton.size(50, 50)
+  muteButton.position(windowWidth - 70, 10)
+  muteButton.mousePressed(toggleMute)
+
+  // start audio dialog
+  clickForSound = createDiv('click anywhere to start sound!')
+  clickForSound.style('font-family', 'Monaco') // fallback font
+  clickForSound.style('font-family', 'EffectsEighty')
+  clickForSound.style('text-align', 'center')
+  clickForSound.style('color', 'black')
+  clickForSound.style('font-size', '18px')
+  clickForSound.position(520, 35)
 }
 
 function scrollZoom(event) {
