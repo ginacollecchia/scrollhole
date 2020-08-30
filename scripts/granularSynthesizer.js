@@ -50,7 +50,8 @@ function GranularSynthesizer(buffer) {
 
   }
 
-  this.update = function(scrollSpeed, scrollSpeedSmoothed) {
+  this.update = function(scrollSpeed) {
+    let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
     grainPlayer.overlap = scrollSpeedSmoothed
 
     // make sure it's not too loud or too quiet

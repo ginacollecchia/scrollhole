@@ -93,6 +93,19 @@ function draw() {
   infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
+  
+  // handle transition to a new region
+  if (scroll.inTransition) {
+    granularSynthesizer[scroll.region].update(scroll.value)
+    // granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
+    granularSynthesizer[scroll.nextRegion].update(scroll.value)
+    // granularSynthesizer[scroll.region].fadeIn(2)
+
+    console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
+  } else {
+    granularSynthesizer[currentRegion].update(scroll.value)
+  }
+  
 }
 
 function loadImages() {
@@ -122,24 +135,13 @@ function loadImages() {
   clickForSound.position(520, 35)
 }
 
+function mousePressed() {
+  infShapes.clicked()
+}
+
 function scrollZoom(event) {
   scroll.scrollZoom(event.delta)
-
-  scrollSpeed = event.delta
-  let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
-
-  // handle transition to a new region
-  if (currentRegion != scroll.region) {
-    granularSynthesizer[scroll.region].update(scrollSpeed, scrollSpeedSmoothed)
-    // granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
-    granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-    // granularSynthesizer[scroll.region].fadeIn(2)
-
-    console.log("Transitioning from region ", currentRegion, " to region ", scroll.region)
-  } else {
-    granularSynthesizer[currentRegion].update(scrollSpeed, scrollSpeedSmoothed)
-  }
-
+  
   granularGains[scroll.region].gain.value = scroll.regionGain
   granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
 }
@@ -151,7 +153,7 @@ function mouseWheel(event) {
 function mouseClicked() {
   if (Tone.context.state !== 'running') {
     Tone.start()
-  } 
+  }
 }
 
 function windowResized() {

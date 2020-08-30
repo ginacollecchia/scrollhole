@@ -17,6 +17,7 @@ function Scroll(numRegions) {
   this.nextRegion = numRegions - 1
   this.regionPosition = 0.0
   this.halfway = this.distance * 0.5
+  this.transitionSpace = .10
 
   this.regionGain = 1.0
   this.nextRegionGain = 0.0
@@ -63,12 +64,12 @@ function Scroll(numRegions) {
   }
 
   this.gainCheck = function() {
-    if (this.regionPosition >= 0.75 && this.regionPosition < 1.0) {
-      let mapped = map(this.regionPosition, 0.75, 1.0, 1.0, 0.5)
+    if (this.regionPosition >= 0.75 && this.regionPosition < 1.0 - this.transitionSpace) {
+      let mapped = map(this.regionPosition, 1.0 - this.transitionSpace, 1.0, 1.0, 0.5)
       this.regionGain = mapped
       this.nextRegionGain = this.regionGain * -1.0 + 1.0
-    } else if (this.regionPosition >= 0.0 && this.regionPosition < 0.25) {
-      let mapped = map(this.regionPosition, 0.0, 0.25, 0.5, 1.0)
+    } else if (this.regionPosition >= 0.0 && this.regionPosition < this.transitionSpace) {
+      let mapped = map(this.regionPosition, 0.0, this.transitionSpace, 0.5, 1.0)
       this.regionGain = mapped
       this.nextRegionGain = this.regionGain * -1.0 + 1.0
     }
