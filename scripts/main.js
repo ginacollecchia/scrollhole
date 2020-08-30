@@ -129,6 +129,7 @@ function mousePressed() {
 
 function scrollZoom(event) {
   scroll.scrollZoom(event.delta)
+  console.log(scroll.value)
 
   scrollSpeed = event.delta
   let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
