@@ -11,7 +11,7 @@ function Scroll(numRegions) {
   this.deltaMax = 750
 
   // distance to next region
-  this.distance = 40000
+  this.distance = 3000000
   this.position = this.distance / 2
   this.region = 0
   this.nextRegion = numRegions - 1

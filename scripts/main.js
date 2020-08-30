@@ -21,8 +21,9 @@ let isMuted = false
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
-  let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
+  // let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
   // let soundFiles = ['./audio/stretching.mp3']
+  let soundFiles = ['./audio/stretchingStereo.mp3', './audio/bubblingOcean.mp3', './audio/grassStorm.mp3']
 
   for (let i = 0; i < soundFiles.length; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
