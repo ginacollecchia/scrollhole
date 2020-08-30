@@ -83,7 +83,7 @@ function GranularSynthesizer(buffer) {
       grainPlayer.reverse = false
     }
 
-    console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
+    // console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
   }
 
 }

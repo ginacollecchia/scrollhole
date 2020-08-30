@@ -100,11 +100,11 @@ function draw() {
     granularGains[scroll.region].gain.value = scroll.regionGain
     granularSynthesizer[scroll.nextRegion].update(scroll.value, scroll.stopped)
     granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
-    console.log("Next region gain = ", scroll.nextRegionGain, "Current region gain = ", scroll.regionGain)
+    // console.log("Next region gain = ", scroll.nextRegionGain, "Current region gain = ", scroll.regionGain)
   } else if (granularSynthesizer[scroll.region]) {
     granularSynthesizer[scroll.region].update(scroll.value, scroll.stopped)
     granularGains[scroll.region].gain.value = scroll.regionGain
-    console.log("Current region gain = ", scroll.regionGain)
+    // console.log("Current region gain = ", scroll.regionGain)
   }
 }
 
