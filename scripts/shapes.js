@@ -131,8 +131,9 @@ function Arcs() {
     strokeWeight(this.weight)
     stroke(this.color)
 
-    arc(0, width
 
-    )
+    // arc(0, width
+
+    // )
   }
 }

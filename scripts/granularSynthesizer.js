@@ -50,12 +50,17 @@ function GranularSynthesizer(buffer) {
 
   }
 
-  this.update = function(scrollSpeed) {
+  this.update = function(scrollSpeed, scrollStopped) {
+    if (scrollStopped) {
+      grainPlayer.volume.value -= 2
+    } else {
+      grainPlayer.volume.value = 0
+    }
+    
     let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
     if (scrollSpeedSmoothed <= 1) {
       scrollSpeedSmoothed = 1
     }
-    
 
     // make sure it's not too loud or too quiet
     // grainPlayer.volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
@@ -67,7 +72,8 @@ function GranularSynthesizer(buffer) {
         grainPlayer.volume.value = 1
       }
     }*/
-    grainPlayer.overlap = Math.abs(scrollSpeed)/200
+      
+    grainPlayer.overlap = Math.abs(scrollSpeed)/20
     // map(value, start1, stop1, start2, stop2, [withinBounds])
     grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01
     grainPlayer.playbackRate = Math.abs(scrollSpeed)/200 + 0.01

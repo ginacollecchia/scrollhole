@@ -94,15 +94,15 @@ function draw() {
   scroll.update()
 
   // handle transition to a new region
-  if (scroll.inTransition && granularSynthesizer[scroll.region] && granularSynthesizer[scroll.nextRegion] && !scroll.stopped) {
+  if (scroll.inTransition && granularSynthesizer[scroll.region] && granularSynthesizer[scroll.nextRegion]) {
     // console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
-    granularSynthesizer[scroll.region].update(scroll.value)
+    granularSynthesizer[scroll.region].update(scroll.value, scroll.stopped)
     granularGains[scroll.region].gain.value = scroll.regionGain
-    granularSynthesizer[scroll.nextRegion].update(scroll.value)
+    granularSynthesizer[scroll.nextRegion].update(scroll.value, scroll.stopped)
     granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
     console.log("Next region gain = ", scroll.nextRegionGain, "Current region gain = ", scroll.regionGain)
-  } else if (granularSynthesizer[scroll.region] && !scroll.stopped) {
-    granularSynthesizer[scroll.region].update(scroll.value)
+  } else if (granularSynthesizer[scroll.region]) {
+    granularSynthesizer[scroll.region].update(scroll.value, scroll.stopped)
     granularGains[scroll.region].gain.value = scroll.regionGain
     console.log("Current region gain = ", scroll.regionGain)
   }
