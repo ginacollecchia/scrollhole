@@ -142,7 +142,7 @@ function mouseWheel(event) {
 }
 
 function mouseClicked() {
-  if (Tone.conttext.state !== 'running') {
+  if (Tone.context.state !== 'running') {
     Tone.start()
   } 
 }
