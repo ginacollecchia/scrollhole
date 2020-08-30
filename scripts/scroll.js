@@ -14,8 +14,12 @@ function Scroll(numRegions) {
   this.distance = 40000
   this.position = this.distance / 2
   this.region = 0
+  this.nextRegion = numRegions - 1
   this.regionPosition = 0.0
-  this.gain = 0.0
+  this.halfway = this.distance * 0.5
+
+  this.regionGain = 1.0
+  this.nextRegionGain = 0.0
 
   const clampNumber = (num, a, b) => Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b))
 
@@ -40,16 +44,38 @@ function Scroll(numRegions) {
 
   this.regionCheck = function() {
     if (this.position > this.distance) {
+      this.lastRegion = this.region
       this.region = (this.region + 1) % numRegions
       this.position -= this.distance
     } else if (this.position < 0) {
+      this.lastRegion = this.region
       this.region = (((this.region - 1) % numRegions) + numRegions) % numRegions
       this.position += this.distance
     }
   }
 
+  this.halfwayCheck = function() {
+    if (this.position > this.halfway) {
+      this.nextRegion = (this.region + 1) % numRegions
+    } else {
+      this.nextRegion = (((this.region - 1) % numRegions) + numRegions) % numRegions
+    }
+  }
+
   this.gainCheck = function() {
-    this.gain = sin(PI * this.regionPosition)
+    if (this.regionPosition >= 0.75 && this.regionPosition < 1.0) {
+      let mapped = map(this.regionPosition, 0.75, 1.0, 1.0, 0.5)
+      this.regionGain = mapped
+      this.nextRegionGain = this.regionGain * -1.0 + 1.0
+    } else if (this.regionPosition >= 0.0 && this.regionPosition < 0.25) {
+      let mapped = map(this.regionPosition, 0.0, 0.25, 0.5, 1.0)
+      this.regionGain = mapped
+      this.nextRegionGain = this.regionGain * -1.0 + 1.0
+    }
+    else {
+      this.regionGain = 1.0
+      this.nextRegionGain = 0.0
+    }
   }
 
   this.update = function() {
@@ -82,8 +108,8 @@ function Scroll(numRegions) {
     this.position += this.value
     this.regionPosition = this.position / this.distance
     this.regionCheck()
+    this.halfwayCheck()
     this.gainCheck()
-    console.log(this.regionPosition, this.gain)
   }
 }
 
