@@ -41,7 +41,7 @@ function preload() {
       granularSynthesizer.push(gs)
     })
   }
-  
+
   eightiesFont = loadFont('./fonts/effects-eighty.otf')
 }
 
@@ -86,7 +86,7 @@ function setup() {
   clickForSound.style('color', 'black')
   clickForSound.style('font-size', '18px')
   clickForSound.position(520, 30)
-  
+
   var options = {
     preventDefault: true
   }
@@ -123,6 +123,10 @@ function draw() {
   scroll.update()
 }
 
+function mousePressed() {
+  infShapes.clicked()
+}
+
 function scrollZoom(event) {
   scroll.scrollZoom(event.delta)
 
@@ -152,7 +156,7 @@ function mouseWheel(event) {
 function mouseClicked() {
   if (Tone.context.state !== 'running') {
     Tone.start()
-  } 
+  }
 }
 
 function windowResized() {

@@ -24,6 +24,14 @@ function InfiniteShapes() {
     })
   }
 
+  this.clicked = function() {
+    shapes.forEach(shape => {
+      if (shape.visible == true) {
+        shape.clicked()
+      }
+    })
+  }
+
   this.update = function(regionPos, index) {
     this.regionPos = regionPos
 
