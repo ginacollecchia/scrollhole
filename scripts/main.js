@@ -29,7 +29,6 @@ function preload() {
   for (let i = 0; i < soundFiles.length; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
       let gs = new GranularSynthesizer(buffer)
-      let ig = new Tone.Gain(0) // initialize all synths with 0 gain
       gs.connect(masterGain)
       gs.start(0)
 
@@ -142,6 +141,12 @@ function mouseWheel(event) {
   scrollZoom(event)
 }
 
+function mouseClicked() {
+  if (Tone.conttext.state !== 'running') {
+    Tone.start()
+  } 
+}
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -155,19 +160,9 @@ function toggleMute() {
   }
 }
 
-function mouseClicked() {
-  if (Tone.conttext.state !== 'running') {
-    Tone.start()
-  } 
-}
-
 function pointBetweenPoints(p1, p2, perc) {
   return {
     x: p1.x + perc * (p2.x - p1.x),
     y: p1.y + perc * (p2.y - p1.y),
   }
-}
-
-function triggerNewRegion(startRegion, endRegion) {
-
 }
