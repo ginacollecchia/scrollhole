@@ -2,7 +2,6 @@ let numRegions = 3, currentRegion = 0
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 let scaledCenter = { x:0.0, y:0.0 }
-let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
@@ -44,7 +43,6 @@ function preload() {
 }
 
 function setup() {
-  console.log(granularGains)
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
   frameRate(40)
@@ -90,22 +88,24 @@ function draw() {
 
   infShapes.draw(center, scaledCenter)
   infShapes.update(scroll.regionPosition, scroll.regionIdx)
+  // adjust denominator of argument for speed
   infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
   
   // handle transition to a new region
-  if (scroll.inTransition) {
+  if (scroll.inTransition && granularSynthesizer[scroll.region] && granularSynthesizer[scroll.nextRegion] && !scroll.stopped) {
+    // console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
     granularSynthesizer[scroll.region].update(scroll.value)
-    // granularSynthesizer[currentRegion].fadeOut(2) // fade out the current granular synth over 2 seconds
+    granularGains[scroll.region].gain.value = scroll.regionGain
     granularSynthesizer[scroll.nextRegion].update(scroll.value)
-    // granularSynthesizer[scroll.region].fadeIn(2)
-
-    console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
-  } else {
+    granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
+    // console.log("Next region gain = ", scroll.nextRegionGain)    
+  } else if (granularSynthesizer[scroll.region] && !scroll.stopped) {
     granularSynthesizer[scroll.region].update(scroll.value)
+    granularGains[scroll.region].gain.value = scroll.regionGain
   }
-  
+  // console.log("Current region gain = ", scroll.regionGain)
 }
 
 function loadImages() {
@@ -141,9 +141,6 @@ function mousePressed() {
 
 function scrollZoom(event) {
   scroll.scrollZoom(event.delta)
-  
-  granularGains[scroll.region].gain.value = scroll.regionGain
-  granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
 }
 
 function mouseWheel(event) {

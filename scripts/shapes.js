@@ -135,16 +135,5 @@ function Arcs() {
     strokeWeight(this.weight)
     stroke(this.color)
 
-    this.diameter = localPos ** 2.5 * maxDist + this.maxWeight * localPos
-
-    let curve = Math.sin(localPos * PI)
-    this.x = center.x + curve * width * scaledCenter.x + wobble.x
-    this.y = center.y + curve * height * scaledCenter.y + wobble.y,
-
-    circle(
-      this.x,
-      this.y,
-      this.diameter
-    )
   }
 }

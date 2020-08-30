@@ -2,6 +2,7 @@
 
 function Scroll(numRegions) {
   this.max = 600
+  this.max = 0
   this.min = 0
   this.value = 0
   this.speed = 5
@@ -9,9 +10,10 @@ function Scroll(numRegions) {
   this.threshold = this.speed * 2
   this.lastDelta = 0
   this.deltaMax = 750
+  this.inTransition = false
 
   // distance to next region
-  this.distance = 3000000
+  this.distance = 1000000
   this.position = this.distance / 2
   this.region = 0
   this.nextRegion = numRegions - 1
@@ -68,14 +70,17 @@ function Scroll(numRegions) {
       let mapped = map(this.regionPosition, 1.0 - this.transitionSpace, 1.0, 1.0, 0.5)
       this.regionGain = mapped
       this.nextRegionGain = this.regionGain * -1.0 + 1.0
+      this.inTransition = true
     } else if (this.regionPosition >= 0.0 && this.regionPosition < this.transitionSpace) {
       let mapped = map(this.regionPosition, 0.0, this.transitionSpace, 0.5, 1.0)
       this.regionGain = mapped
       this.nextRegionGain = this.regionGain * -1.0 + 1.0
+      this.inTransition = true
     }
     else {
       this.regionGain = 1.0
       this.nextRegionGain = 0.0
+      this.inTransition = false
     }
   }
 

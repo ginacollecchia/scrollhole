@@ -52,7 +52,10 @@ function GranularSynthesizer(buffer) {
 
   this.update = function(scrollSpeed) {
     let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
-    grainPlayer.overlap = scrollSpeedSmoothed
+    if (scrollSpeedSmoothed <= 1) {
+      scrollSpeedSmoothed = 1
+    }
+    
 
     // make sure it's not too loud or too quiet
     // grainPlayer.volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
@@ -64,10 +67,10 @@ function GranularSynthesizer(buffer) {
         grainPlayer.volume.value = 1
       }
     }*/
-    grainPlayer.overlap = Math.abs(scrollSpeed)/50
+    grainPlayer.overlap = Math.abs(scrollSpeed)/200
     // map(value, start1, stop1, start2, stop2, [withinBounds])
-    grainPlayer.grainSize = 1/scrollSpeedSmoothed + 0.01
-    grainPlayer.playbackRate = Math.abs(scrollSpeed)/10 + 0.01
+    grainPlayer.grainSize = 2.5/scrollSpeedSmoothed + 0.01
+    grainPlayer.playbackRate = Math.abs(scrollSpeed)/100 + 0.01
     if (scrollSpeed < 0) {
       grainPlayer.reverse = true
       // scrollSpeedSmoothed *= -1
@@ -75,7 +78,7 @@ function GranularSynthesizer(buffer) {
       grainPlayer.reverse = false
     }
 
-    // console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
+    console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
   }
 
 }
