@@ -1,4 +1,4 @@
-let isMuted = false, isStarted = false
+let isMuted = false
 let numRegions = 3
 let bgCol
 let center = { x:0, y:0 }
@@ -74,12 +74,13 @@ function setup() {
 
   // start audio dialog
   clickForSound = createDiv('click anywhere to start sound!')
+  clickForSound.style('font-family', 'Monaco') // fallback font
   clickForSound.style('font-family', 'EffectsEighty')
   clickForSound.style('text-align', 'center')
   clickForSound.style('color', 'black')
   clickForSound.style('font-size', '18px')
   clickForSound.position(520, 30)
-
+  
   var options = {
     preventDefault: true
   }
@@ -101,7 +102,7 @@ function draw() {
     muteButton.show()
   }
 
-  if (!isStarted) {
+  if (Tone.context.state !== 'running') {
     clickForSound.show()
   } else {
     clickForSound.hide()
@@ -155,8 +156,7 @@ function toggleMute() {
 }
 
 function mouseClicked() {
-  if (!isStarted) {
-    isStarted = !isStarted
+  if (Tone.conttext.state !== 'running') {
     Tone.start()
   } 
 }
