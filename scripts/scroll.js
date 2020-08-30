@@ -70,7 +70,7 @@ function Scroll(numRegions) {
   }
 
   this.gainCheck = function() {
-    if (this.regionPosition >= 0.75 && this.regionPosition < 1.0 - this.transitionSpace) {
+    if (this.regionPosition >= 1.0 - this.transitionSpace && this.regionPosition < 1.0) {
       let mapped = map(this.regionPosition, 1.0 - this.transitionSpace, 1.0, 1.0, 0.5)
       this.regionGain = mapped
       this.nextRegionGain = this.regionGain * -1.0 + 1.0

@@ -120,7 +120,6 @@ function draw() {
   infShapes.scroll(scroll.value / 30000)
 
   scroll.update()
-  console.log(scrollingState)
 }
 
 function mousePressed() {
@@ -147,6 +146,7 @@ function scrollZoom(event) {
 
   granularGains[scroll.region].gain.value = scroll.regionGain
   granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
+  console.log(scroll.regionGain, scroll.nextRegionGain)
 }
 
 function mouseWheel(event) {
