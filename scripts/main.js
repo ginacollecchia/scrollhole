@@ -4,12 +4,12 @@ let bgCol
 let center = { x:0, y:0 }
 let mouseCenter = { x:0, y:0 }
 
-let muteButton, unmuteButton, clickForSound, logo, eighties_font, aboutButton
+let muteButton, unmuteButton, clickForSound, logo, eightiesFont
 let scrollSpeed = 0
 const startTime = Tone.now()
 let gain = 0.9
 let position = 0
-let scroll = new Scroll(numRegions) // is scroll overloaded?
+let scroll = new Scroll(numRegions)
 let currentRegion = 0
 
 let mouseFollow = { x: 0, y: 0 }
@@ -28,6 +28,7 @@ function preload() {
   for (let i = 0; i < soundFiles.length; i++) {
     let buffer = new Tone.Buffer(soundFiles[i], function() {
       let gs = new GranularSynthesizer(buffer)
+      let ig = new Tone.Gain(0) // initialize all synths with 0 gain
       gs.connect(masterGain)
       gs.start(0)
 
@@ -35,8 +36,8 @@ function preload() {
     })
   }
   
-  eighties_font = loadFont('./fonts/effects-eighty.otf', function() {
-    console.log('loaded font', eighties_font)
+  eightiesFont = loadFont('./fonts/effects-eighty.otf', function() {
+    // console.log('loaded font', eightiesFont)
   })
 }
 
@@ -57,7 +58,7 @@ function setup() {
 
   infShapes.updateGroup(7)
   // logo
-  logo = createImg('./img/scrollhole_logo.png')
+  logo = createImg('./img/scrollholeLogo.png')
   logo.size(488, 75)
   logo.position(10, 10)
 
@@ -75,18 +76,12 @@ function setup() {
   // start audio dialog
   clickForSound = createDiv('click anywhere to start sound!')
   // clickForSound.style('font-family', 'EffectsEighty') // no worky...
-  clickForSound.style('font-family', 'Courier')
+  clickForSound.style('font-family', 'EffectsEighty')
   clickForSound.style('text-align', 'center')
   clickForSound.style('color', 'black')
   clickForSound.style('font-size', '18px')
   clickForSound.position(520, 30)
-  
-  // about link
-  aboutButton = createImg('./img/what.png')
-  aboutButton.size(80, 30)
-  aboutButton.position(windowWidth - 170, 20)
-  aboutButton.mousePressed(showAboutModalDialog)
-
+    
   var options = {
     preventDefault: true
   }
@@ -122,8 +117,6 @@ function draw() {
   
   logo.show()
   
-  aboutButton.show()
-
   infShapes.draw(center, scaledCenter)
   infShapes.update()
   infShapes.scroll(scroll.value / 20000)
@@ -169,15 +162,10 @@ function toggleMute() {
   }
 }
 
-function showAboutModalDialog() {
-  
-}
-
 function mouseClicked() {
   if (!isStarted) {
     isStarted = !isStarted
     Tone.start()
-    clickForSound.hide()
   } 
 }
 
