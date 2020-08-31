@@ -53,35 +53,28 @@ function GranularSynthesizer(buffer) {
   this.update = function(scrollSpeed, scrollStopped) {
     if (scrollStopped) {
       grainPlayer.volume.value -= 2
-    } else {
-      grainPlayer.volume.value = 0
+    } else {      
+      let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
+      if (scrollSpeedSmoothed <= 1) {
+        scrollSpeedSmoothed = 1
+      }
+
+      // map(value, start1, stop1, start2, stop2, [withinBounds])
+      grainPlayer.volume.value = map(Math.abs(scrollSpeed), 0, 300, -12, 0, false)
+    
+      // overlap: Time: The duration of the cross-fade between successive grains.
+      grainPlayer.overlap = 1/Math.abs(scrollSpeed) + 0.3  // 1.3 to .3
+      // grainSize: Time: The size of each chunk of audio that the buffer is chopped into and played back at.
+      grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01 // 2 to 1/3
+      grainPlayer.playbackRate = scrollSpeedSmoothed/6 + 0.01 // 0.167 to 1
+      if (scrollSpeed < 0) {
+        grainPlayer.reverse = true
+      } else {
+        grainPlayer.reverse = false
+      }
+      
     }
     
-    let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
-    if (scrollSpeedSmoothed <= 1) {
-      scrollSpeedSmoothed = 1
-    }
-
-    // make sure it's not too loud or too quiet
-    // grainPlayer.volume = map(scrollSpeed, -500, 500, 0.2, 1, true)
-    /* if (scrollSpeedSmoothed > 6) {
-      grainPlayer.volume.value = 0
-    } else {
-      grainPlayer.volume.value = scrollSpeedSmoothed/2 - 3
-      if (grainPlayer.volume.value > 0) {
-        grainPlayer.volume.value = 1
-      }
-    }*/
-      
-    grainPlayer.overlap = Math.abs(scrollSpeed)/20
-    // map(value, start1, stop1, start2, stop2, [withinBounds])
-    grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01
-    grainPlayer.playbackRate = Math.abs(scrollSpeed)/200 + 0.01
-    if (scrollSpeed < 0) {
-      grainPlayer.reverse = true
-    } else {
-      grainPlayer.reverse = false
-    }
 
     // console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
   }

@@ -4,11 +4,11 @@ function Scroll(numRegions) {
   this.max = 600
   this.min = 0
   this.value = 0
-  this.speed = 10
+  this.speed = 12
   this.positive = true
   this.threshold = this.speed * 2
   this.lastDelta = 0
-  this.deltaMax = 750
+  this.deltaMax = 500
   this.inTransition = false
 
   // distance to next region

@@ -54,10 +54,31 @@ a {
   cursor: pointer;
 }
 
+.radial-gradient {
+  position:fixed;
+  top:0px;
+  left:0px;
+  height:100%;
+  width:100%;
+  z-index:-1;
+  
+  /*Fallback if gradeints don't work */
+  background: #9b59b6;
+  /*Linear gradient... */
+  background: 
+    radial-gradient(
+     at center, #3498db, #9b59b6
+    );
+}
+
 /* mobile view */
 @media only screen and (max-device-width: 480px) {
 	img {
 		width: 100%;
 		height: auto;
 	}
+  
+  .modal-content {
+    width: 80%;
+  }
 }

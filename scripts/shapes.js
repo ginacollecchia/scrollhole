@@ -13,6 +13,8 @@ function checkEnding(localPos, lastPos) {
 function Circle(i, g, maxDist) {
   let index = i
 
+  colorMode(HSB, 109, 88, 99) // lime green is most saturated hue
+
   this.i = i
   this.g = g
   this.maxDist = maxDist
@@ -40,8 +42,13 @@ function Circle(i, g, maxDist) {
     let d = dist(mouseX, mouseY, this.x, this.y)
 
     if (d > this.diameter * 0.5 - this.weight * 0.5 &&
-      d < this.diameter * 0.5 + this.weight* 0.5) {
-      this.color = 'red'
+      d < this.diameter * 0.5 + this.weight * 0.5) {
+        // change to be a function of diameter: when diameter = windowWidth, color is dark green, when diameter = 0, color is light green
+        this.color = 'red'
+      return true
+    } else {
+      this.color = 'black'
+      return false
     }
   }
 
@@ -53,11 +60,11 @@ function Circle(i, g, maxDist) {
     }
 
     noFill()
-    this.weight = localPos ** 2.5 * this.maxWeight * localPos + 10 * sinPos
+    this.weight = localPos ** 4 * this.maxWeight * localPos + 10 * sinPos
     strokeWeight(this.weight)
     stroke(this.color)
 
-    this.diameter = localPos ** 2.5 * maxDist + this.maxWeight * localPos
+    this.diameter = localPos ** 4 * maxDist + this.maxWeight * localPos
 
     let curve = Math.sin(localPos * PI)
     this.x = center.x + curve * width * scaledCenter.x + wobble.x

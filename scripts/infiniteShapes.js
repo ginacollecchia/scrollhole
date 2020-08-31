@@ -80,7 +80,7 @@ function InfiniteShapes() {
 
   this.clicked = function() {
     shapes.forEach(shape => {
-      if (shape.visible == true) {
+      if (shape.visible == true && !shape.clicked()) {
         shape.clicked()
       }
     })
