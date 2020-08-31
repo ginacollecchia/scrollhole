@@ -17,7 +17,6 @@ let masterGain
 let muteButton, unmuteButton, clickForSound, logo // images
 let isMuted = false
 
-
 function preload() {
   masterGain = new Tone.Gain().toDestination()
   // let soundFiles = ['./audio/stretching.mp3', './audio/bubbling.mp3', './audio/grass.mp3']
@@ -38,25 +37,28 @@ function preload() {
       granularSynthesizer.push(gs)
     })
   }
-  
+
   loadFont('./fonts/effects-eighty.otf')
 }
 
 function setup() {
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
+
+  colorMode(HSB, 360)
   frameRate(40)
 
   center.x = width / 2.0
   center.y = height / 2.0
-  mouseFollow = center
+  mouseFollow.x = center.x
+  mouseFollow.y = center.y
 
   infShapes = new InfiniteShapes()
 
-  infShapes.updateGroup(7)
-  
+  infShapes.updateGroup(12)
+
   loadImages()
-  
+
   var options = {
     preventDefault: true
   }
@@ -86,7 +88,7 @@ function draw() {
 
   logo.show()
 
-  infShapes.draw(center, scaledCenter)
+  infShapes.draw(center, scaledCenter, scroll.region, scroll.nextRegion, scroll.inTransition, scroll.regionGain, scroll.nextRegionGain)
   infShapes.update(scroll.regionPosition, scroll.regionIdx)
   // adjust denominator of argument for speed
   infShapes.scroll(scroll.value / 30000)

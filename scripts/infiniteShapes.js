@@ -14,14 +14,68 @@ function InfiniteShapes() {
   let wobble = { x: 0.0, y: 0.0 }
   this.regionPos = 0.0
 
-  this.drawShapes = function(center, scaledCenter) {
-    let sinPos = sin(this.regionPos * PI)
+  this.draw = function(center, scaledCenter, region, nextRegion, inTransition, regionGain, nextRegionGain) {
     shapes.forEach(shape => {
-      if (shape.visible == true) {
-        shape.update(wobble)
-        shape.draw(pos, sinPos, center, scaledCenter)
+      shape.update(wobble)
+
+      let sinPos = sin(this.regionPos * PI)
+      if (shape.region == region) {
+        sinPos = 0.0
+      }
+
+      const check = shape.draw(pos, sinPos, center, scaledCenter)
+
+      if (check && !inTransition) {
+        if(shape.type == 'polygon' && region == 2) {
+          shape.updateSides(this.regionPos)
+        }
+        this.confirmShape(shape, region)
+      }
+
+      if (check && inTransition) {
+        this.checkShapes(shape, region, nextRegion, regionGain, nextRegionGain)
       }
     })
+  }
+
+  this.confirmShape = function(shape, region) {
+    let props = {
+      i: shape.i,
+      g: shape.g,
+      maxDist: shape.maxDist,
+    }
+
+    if (region == 0 && shape.type !== 'circle') {
+      shapes[props.i] = new Circle(props.i, props.g, props.maxDist)
+    }
+    if (region == 1 && shape.type !== 'arcs') {
+      shapes[props.i] = new Arcs(props.i, props.g, props.maxDist)
+    }
+    if (region == 2 && shape.type !== 'polygon') {
+      shapes[props.i] = new Polygon(props.i, props.g, props.maxDist, this.regionPos)
+    }
+  }
+
+  this.checkShapes = function(shape, region, nextRegion, regionGain, nextRegionGain) {
+    const state = Math.round(Math.random())
+
+    let props = {
+      i: shape.i,
+      g: shape.g,
+      maxDist: shape.maxDist,
+    }
+
+    if (state == 1) {
+      if (nextRegion == 0) {
+        shapes[props.i] = new Circle(props.i, props.g, props.maxDist)
+      }
+      if (nextRegion == 1) {
+        shapes[props.i] = new Arcs(props.i, props.g, props.maxDist)
+      }
+      if (nextRegion == 2) {
+        shapes[props.i] = new Polygon(props.i, props.g, props.maxDist, this.regionPos * -1.0 + 1.0)
+      }
+    }
   }
 
   this.clicked = function() {
@@ -34,16 +88,6 @@ function InfiniteShapes() {
 
   this.update = function(regionPos, index) {
     this.regionPos = regionPos
-
-    shapes.forEach(shape => {
-      if (pos < shape.origin && shape.ready == false) {
-        shape.ready = true
-      }
-      if (pos > shape.origin && shape.ready == true && shape.visible == false) {
-        shape.visible = true
-      }
-    })
-
     pos += dir + scrollSpeed
 
     if (pos > 1.0) {
@@ -68,11 +112,6 @@ function InfiniteShapes() {
 
   this.scroll = function(s) {
     scrollSpeed = s
-  }
-
-  // put this in the draw loop
-  this.draw = function(center, scaledCenter) {
-    this.drawShapes(center, scaledCenter)
   }
 }
 
