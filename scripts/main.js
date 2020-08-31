@@ -145,6 +145,7 @@ function mouseWheel(event) {
 function mouseClicked() {
   if (Tone.context.state !== 'running') {
     Tone.start()
+    isMuted = false
   }
 }
 
@@ -156,6 +157,7 @@ function touchMoved(eventt) {
 function touchStarted() {
   if (Tone.context.state != 'running') {
     Tone.start()
+    isMuted = false
   }
 }
 
