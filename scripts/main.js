@@ -15,7 +15,7 @@ let granularSynthesizer = []
 let granularGains = []
 let masterGain
 
-let muteButton, unmuteButton, clickForSound, logo // images
+let muteButton, unmuteButton, logo // images
 let isMuted = false
 
 function preload() {
@@ -76,7 +76,6 @@ function draw() {
   scaledCenter.x = (mouseFollow.x / width - 0.5)
   scaledCenter.y = (mouseFollow.y / height - 0.5)
 
-
   if (isMuted) {
     muteButton.hide()
     unmuteButton.show()
@@ -86,10 +85,8 @@ function draw() {
   }
 
   if (Tone.context.state !== 'running') {
-    clickForSound.show()
-  } else {
-    clickForSound.hide()
-  }
+    isMuted = true
+  } 
 
   logo.show()
 
@@ -102,44 +99,35 @@ function draw() {
 
   // handle transition to a new region
   if (scroll.inTransition && granularSynthesizer[scroll.region] && granularSynthesizer[scroll.nextRegion]) {
-    // console.log("Transitioning from region ", scroll.nextRegion, " to region ", scroll.region)
     granularSynthesizer[scroll.region].update(scroll.value, scroll.stopped)
     granularGains[scroll.region].gain.value = scroll.regionGain
     granularSynthesizer[scroll.nextRegion].update(scroll.value, scroll.stopped)
     granularGains[scroll.nextRegion].gain.value = scroll.nextRegionGain
-    // console.log("Next region gain = ", scroll.nextRegionGain, "Current region gain = ", scroll.regionGain)
   } else if (granularSynthesizer[scroll.region]) {
     granularSynthesizer[scroll.region].update(scroll.value, scroll.stopped)
     granularGains[scroll.region].gain.value = scroll.regionGain
-    // console.log("Current region gain = ", scroll.regionGain)
   }
 }
 
 function loadImages() {
   // logo
   logo = createImg('./img/scrollholeLogo.png')
-  logo.size(488, 75)
-  logo.position(10, 10)
+  logo.id('logo')
+  logo.size(600, 92)
+  logo.position(10, 30)
 
   // mute button
   unmuteButton = createImg('./img/unmuteButtonGreenBlack.png')
-  unmuteButton.size(50, 50)
-  unmuteButton.position(windowWidth - 70, 10)
+  unmuteButton.id('unmute')
+  unmuteButton.size(80, 80)
+  unmuteButton.position(windowWidth - 100, 20)
   unmuteButton.mousePressed(toggleMute)
 
   muteButton = createImg('./img/muteButtonGreenBlack.png')
-  muteButton.size(50, 50)
-  muteButton.position(windowWidth - 70, 10)
+  muteButton.id('mute')
+  muteButton.size(80, 80)
+  muteButton.position(windowWidth - 100, 20)
   muteButton.mousePressed(toggleMute)
-
-  // start audio dialog
-  clickForSound = createDiv('click anywhere to start sound!')
-  clickForSound.style('font-family', 'Monaco') // fallback font
-  clickForSound.style('font-family', 'EffectsEighty')
-  clickForSound.style('text-align', 'center')
-  clickForSound.style('color', 'black')
-  clickForSound.style('font-size', '18px')
-  clickForSound.position(520, 35)
 }
 
 function mousePressed() {
