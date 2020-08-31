@@ -13,10 +13,18 @@ let mouseFollow = { x: 0, y: 0 }
 let granularSynthesizer = []
 let granularGains = []
 let masterGain
+let sequencerPlayer = []
+let sequencerGains = []
 
-let muteButton, unmuteButton, clickForSound, logo // images
-let isMuted = false
+let sequencerIDs = ['0', '1', '2', '3', '01', '02', '03', '12', '13', '23', '012', '013', '123', '0123']
+let currentSequence, nextSequence, sequencerSelections = []
+let bpm = 120
 
+
+let muteButton, unmuteButton, clickForSound, logo, sequencerButtons = [] // images
+let isMuted = false, isSelected = [false, false, false, false], sequencerOn = false
+
+let shOrange = color(252, 94, 5), shYellow = color(248, 239, 0), shGreen = color(72, 254, 30), shBlue = color(0, 234, 232), shPink = color(230, 8, 109)
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
@@ -36,6 +44,25 @@ function preload() {
 
       granularGains.push(gg)
       granularSynthesizer.push(gs)
+    })
+  }
+  
+  let sequencerFiles = ['./audio/sequencer/0.mp3', './audio/sequencer/1.mp3', './audio/sequencer/2.mp3', './audio/sequencer/3.mp3', './audio/sequencer/01.mp3', './audio/sequencer/02.mp3', 
+  './audio/sequencer/03.mp3', './audio/sequencer/12.mp3', './audio/sequencer/13.mp3', './audio/sequencer/23.mp3', './audio/sequencer/012.mp3', './audio/sequencer/013.mp3', 
+  './audio/sequencer/123.mp3', './audio/sequencer/0123.mp3']
+  
+  for (let i = 0; i < sequencerFiles.length; i++) {
+    let buffer = new Tone.Buffer(sequencerFiles[i], function() {
+      let sp = new SequencerPlayer(buffer)
+      let sg = new Tone.Gain()
+      sg.gain.value = 0.0
+      
+      sp.connect(sg)
+      sg.connect(masterGain)
+      sp.start(0)
+      
+      sequencerGains.push(sg)
+      sequencerPlayer.push(sp)
     })
   }
   
@@ -85,7 +112,17 @@ function draw() {
   }
 
   logo.show()
-
+  
+  for (var i = 0; i < 4; i++) {
+    if (isSelected[i]) {
+      sequencerButtonsOff[i].hide()
+      sequencerButtonsOn[i].show()
+    } else {
+      sequencerButtonsOn[i].hide()
+      sequencerButtonsOff[i].show()
+    }
+  }
+  
   infShapes.draw(center, scaledCenter)
   infShapes.update(scroll.regionPosition, scroll.regionIdx)
   // adjust denominator of argument for speed
@@ -106,6 +143,18 @@ function draw() {
     granularGains[scroll.region].gain.value = scroll.regionGain
     // console.log("Current region gain = ", scroll.regionGain)
   }
+  
+  // update playback rate of sequencer
+  if (sequencerOn && sequencerPlayer[currentSequence].loopHasFinished && nextSequence != currentSequence && sequencerPlayer[currentSequence] && sequencerPlayer[nextSequence]) {
+    sequencerGains[currentSequence].gain.value = 0
+    sequencerPlayer[nextSequence].updatePlayback(scroll.value, scroll.stopped)
+    sequencerGains[nextSequence].gain.value = 1
+    currentSequence = nextSequence
+  } else if (sequencerOn && sequencerPlayer[currentSequence]) {
+    sequencerPlayer[currentSequence].updatePlayback(scroll.value, scroll.stopped)
+    sequencerGains[currentSequence].gain.value = 1
+  } 
+  
 }
 
 function loadImages() {
@@ -133,6 +182,24 @@ function loadImages() {
   clickForSound.style('color', 'black')
   clickForSound.style('font-size', '18px')
   clickForSound.position(520, 35)
+  
+  // sequencer buttons
+  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected1.png')) // actually the 0th, but user will see a 1
+  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected2.png'))
+  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected3.png'))
+  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected4.png'))
+  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected1.png'))
+  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected2.png'))
+  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected3.png'))
+  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected4.png'))
+  for (var i = 0; i < 4; i++) {
+    sequencerButtonsOff[i].size(50, 50)
+    sequencerButtonsOff[i].position(10+60*i, 90)
+    sequencerButtonsOff[i].mousePressed(toggleSequencerButtons(i))
+    sequencerButtonsOn[i].size(50, 50)
+    sequencerButtonsOn[i].position(10+60*i, 90)
+    sequencerButtonsOn[i].mousePressed(toggleSequencerButtons(i))
+  }
 }
 
 function mousePressed() {
@@ -163,6 +230,37 @@ function toggleMute() {
     masterGain.gain.value = 0.0
   } else {
     masterGain.gain.value = gain
+  }
+}
+
+function queueNextDrumLoop(selections) {
+  let s = selections.sort()
+  let t = s.toString()
+  let u = t.replace(/,/g, "")
+  if (currentSequence < 0) {
+    // initialize the first loop
+    currentSequence = sequencerIDs.findIndex(u)
+    nextSequence = currentSequence
+    sequencerGains[currentSequence] = 1
+  } else {
+    nextSequence = sequencerIDs.findIndex(u)
+  }
+}
+
+function toggleSequencerButtons(i) {
+  isSelected[i] = !isSelected[i]
+  if (isSelected[i]) {
+    sequencerOn = true
+    sequencerSelections.push[i]
+    queueNextDrumLoop(sequencerSelections)
+  } else {
+    sequencerSelections.pop[i]
+    if (sequencerSelections.length == 0) {
+      sequencerOn = false
+    } else {
+      sequencerOn = true
+      queueNextDrumLoop(sequencerSelections)
+    }
   }
 }
 
