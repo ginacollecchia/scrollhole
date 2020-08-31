@@ -21,10 +21,10 @@ let currentSequence, nextSequence, sequencerSelections = []
 let bpm = 120
 
 
-let muteButton, unmuteButton, clickForSound, logo, sequencerButtons = [] // images
+let muteButton, unmuteButton, clickForSound, logo, sequencerButtonsOn = [], sequencerButtonsOff = [] // images
 let isMuted = false, isSelected = [false, false, false, false], sequencerOn = false
 
-let shOrange = color(255, 90, 0), shYellow = color(248, 239, 0), shGreen = color(72, 254, 30), shBlue = color(0, 234, 232), shPink = color(235, 3, 138)
+// let shOrange = color(255, 90, 0), shYellow = color(248, 239, 0), shGreen = color(72, 254, 30), shBlue = color(0, 234, 232), shPink = color(235, 3, 138)
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
@@ -51,7 +51,7 @@ function preload() {
   './audio/sequencer/03.mp3', './audio/sequencer/12.mp3', './audio/sequencer/13.mp3', './audio/sequencer/23.mp3', './audio/sequencer/012.mp3', './audio/sequencer/013.mp3', 
   './audio/sequencer/123.mp3', './audio/sequencer/0123.mp3']
   
-  for (let i = 0; i < sequencerFiles.length; i++) {
+  /* for (let i = 0; i < sequencerFiles.length; i++) {
     let buffer = new Tone.Buffer(sequencerFiles[i], function() {
       let sp = new SequencerPlayer(buffer)
       let sg = new Tone.Gain()
@@ -64,7 +64,7 @@ function preload() {
       sequencerGains.push(sg)
       sequencerPlayer.push(sp)
     })
-  }
+  } */
   
   loadFont('./fonts/effects-eighty.otf')
 }
@@ -145,7 +145,7 @@ function draw() {
   }
   
   // update playback rate of sequencer
-  if (sequencerOn && sequencerPlayer[currentSequence].loopHasFinished && nextSequence != currentSequence && sequencerPlayer[currentSequence] && sequencerPlayer[nextSequence]) {
+  /* if (sequencerOn && sequencerPlayer[currentSequence].loopHasFinished && nextSequence != currentSequence && sequencerPlayer[currentSequence] && sequencerPlayer[nextSequence]) {
     sequencerGains[currentSequence].gain.value = 0
     sequencerPlayer[nextSequence].updatePlayback(scroll.value, scroll.stopped)
     sequencerGains[nextSequence].gain.value = 1
@@ -153,7 +153,7 @@ function draw() {
   } else if (sequencerOn && sequencerPlayer[currentSequence]) {
     sequencerPlayer[currentSequence].updatePlayback(scroll.value, scroll.stopped)
     sequencerGains[currentSequence].gain.value = 1
-  } 
+  } */
   
 }
 
@@ -168,7 +168,6 @@ function loadImages() {
   unmuteButton.size(50, 50)
   unmuteButton.position(windowWidth - 70, 10)
   unmuteButton.mousePressed(toggleMute)
-
   muteButton = createImg('./img/muteButtonGreenBlack.png')
   muteButton.size(50, 50)
   muteButton.position(windowWidth - 70, 10)
@@ -184,22 +183,32 @@ function loadImages() {
   clickForSound.position(520, 35)
   
   // sequencer buttons
-  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected1.png')) // actually the 0th, but user will see a 1
-  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected2.png'))
-  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected3.png'))
-  sequencerButtonsOff.push(createImg('./img/sequencerButtonUnselected4.png'))
-  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected1.png'))
-  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected2.png'))
-  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected3.png'))
-  sequencerButtonsOn.push(createImg('./img/sequencerButtonSelected4.png'))
+  sequencerButtonsOff.push(createImg('./img/unselectedSequencerButton1.png')) // actually the 0th, but user will see a 1
+  sequencerButtonsOff.push(createImg('./img/unselectedSequencerButton2.png'))
+  sequencerButtonsOff.push(createImg('./img/unselectedSequencerButton3.png'))
+  sequencerButtonsOff.push(createImg('./img/unselectedSequencerButton4.png'))
+  sequencerButtonsOn.push(createImg('./img/selectedSequencerButton1.png'))
+  sequencerButtonsOn.push(createImg('./img/selectedSequencerButton2.png'))
+  sequencerButtonsOn.push(createImg('./img/selectedSequencerButton3.png'))
+  sequencerButtonsOn.push(createImg('./img/selectedSequencerButton4.png'))
   for (var i = 0; i < 4; i++) {
-    sequencerButtonsOff[i].size(50, 50)
-    sequencerButtonsOff[i].position(10+60*i, 90)
-    sequencerButtonsOff[i].mousePressed(toggleSequencerButtons(i))
-    sequencerButtonsOn[i].size(50, 50)
-    sequencerButtonsOn[i].position(10+60*i, 90)
-    sequencerButtonsOn[i].mousePressed(toggleSequencerButtons(i))
+    sequencerButtonsOff[i].size(40, 40)
+    // sequencerButtonsOff[i].mousePressed(toggleSequencerButtons(i)) // javascript doesn't like a callback with arguments?
+    sequencerButtonsOff[i].position(10+50*i, 90)
+    sequencerButtonsOn[i].size(40, 40)
+    sequencerButtonsOn[i].position(10+50*i, 90)
+    // sequencerButtonsOn[i].mousePressed(toggleSequencerButtons(i))
+    
   }
+  sequencerButtonsOff[0].mousePressed(toggleSequencerButton0)
+  sequencerButtonsOff[1].mousePressed(toggleSequencerButton1)
+  sequencerButtonsOff[2].mousePressed(toggleSequencerButton2)
+  sequencerButtonsOff[3].mousePressed(toggleSequencerButton3)
+  sequencerButtonsOn[0].mousePressed(toggleSequencerButton0)
+  sequencerButtonsOn[1].mousePressed(toggleSequencerButton1)
+  sequencerButtonsOn[2].mousePressed(toggleSequencerButton2)
+  sequencerButtonsOn[3].mousePressed(toggleSequencerButton3)
+  
 }
 
 function mousePressed() {
@@ -250,19 +259,36 @@ function queueNextDrumLoop(selections) {
 function toggleSequencerButtons(i) {
   isSelected[i] = !isSelected[i]
   if (isSelected[i]) {
-    sequencerOn = true
-    sequencerSelections.push[i]
-    queueNextDrumLoop(sequencerSelections)
+    // sequencerSelections.push(i)
+    // queueNextDrumLoop(sequencerSelections)
   } else {
-    sequencerSelections.pop[i]
-    if (sequencerSelections.length == 0) {
+    // sequencerSelections.pop(i)
+    /* if (sequencerSelections.length == 0) {
       sequencerOn = false
     } else {
       sequencerOn = true
-      queueNextDrumLoop(sequencerSelections)
-    }
+      // queueNextDrumLoop(sequencerSelections)
+    } */
   }
+  console.log(isSelected)
 }
+
+function toggleSequencerButton0() {
+  isSelected[0] = !isSelected[0]
+}
+
+function toggleSequencerButton1() {
+  isSelected[1] = !isSelected[1]
+}
+
+function toggleSequencerButton2() {
+  isSelected[2] = !isSelected[2]
+}
+
+function toggleSequencerButton3() {
+  isSelected[3] = !isSelected[3]
+}
+
 
 function pointBetweenPoints(p1, p2, perc) {
   return {
