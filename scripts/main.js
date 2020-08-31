@@ -24,7 +24,7 @@ let bpm = 120
 let muteButton, unmuteButton, clickForSound, logo, sequencerButtons = [] // images
 let isMuted = false, isSelected = [false, false, false, false], sequencerOn = false
 
-let shOrange = color(252, 94, 5), shYellow = color(248, 239, 0), shGreen = color(72, 254, 30), shBlue = color(0, 234, 232), shPink = color(230, 8, 109)
+let shOrange = color(255, 90, 0), shYellow = color(248, 239, 0), shGreen = color(72, 254, 30), shBlue = color(0, 234, 232), shPink = color(235, 3, 138)
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
