@@ -84,10 +84,6 @@ function draw() {
     muteButton.show()
   }
 
-  if (Tone.context.state !== 'running') {
-    isMuted = true
-  } 
-
   logo.show()
 
   infShapes.draw(center, scaledCenter, scroll.region, scroll.nextRegion, scroll.inTransition, scroll.regionGain, scroll.nextRegionGain)
@@ -114,20 +110,25 @@ function loadImages() {
   logo = createImg('./img/scrollholeLogo.png')
   logo.id('logo')
   logo.size(600, 92)
-  logo.position(10, 30)
+  logo.position(25, 30)
 
   // mute button
   unmuteButton = createImg('./img/unmuteButtonGreenBlack.png')
   unmuteButton.id('unmute')
   unmuteButton.size(80, 80)
-  unmuteButton.position(windowWidth - 100, 20)
+  unmuteButton.position(windowWidth - 110, 25)
   unmuteButton.mousePressed(toggleMute)
 
   muteButton = createImg('./img/muteButtonGreenBlack.png')
   muteButton.id('mute')
   muteButton.size(80, 80)
-  muteButton.position(windowWidth - 100, 20)
+  muteButton.position(windowWidth - 110, 25)
   muteButton.mousePressed(toggleMute)
+  
+  if (Tone.context.state !== 'running') {
+    isMuted = true
+  }
+  
 }
 
 function mousePressed() {
