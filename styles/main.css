@@ -81,4 +81,9 @@ a {
   .modal-content {
     width: 80%;
   }
+  
+  #aboutButton {
+    width: 80px;
+    height: 30px;
+  }
 }
