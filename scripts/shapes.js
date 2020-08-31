@@ -2,12 +2,14 @@
 
 function Circle(i, g, maxDist) {
   let index = i
+  
+  colorMode(HSB, 109, 88, 99) // lime green is most saturated hue
 
   this.origin = (1.0 / g) * i + 1.0 / g * 0.5
   this.visible = false
   this.ready = false
   this.color = 'black'
-  this.maxWeight = 60
+  this.maxWeight = 150
   this.diameter = 0
 
   this.weight = 0
@@ -24,8 +26,13 @@ function Circle(i, g, maxDist) {
     let d = dist(mouseX, mouseY, this.x, this.y)
 
     if (d > this.diameter * 0.5 - this.weight * 0.5 &&
-      d < this.diameter * 0.5 + this.weight* 0.5) {
-      this.color = 'red'
+      d < this.diameter * 0.5 + this.weight * 0.5) {
+        // change to be a function of diameter: when diameter = windowWidth, color is dark green, when diameter = 0, color is light green
+        this.color = 'red' 
+      return true
+    } else {
+      this.color = 'black'
+      return false
     }
   }
 
@@ -37,11 +44,11 @@ function Circle(i, g, maxDist) {
     }
 
     noFill()
-    this.weight = localPos ** 2.5 * this.maxWeight * localPos + 10 * sinPos
+    this.weight = localPos ** 4 * this.maxWeight * localPos + 10 * sinPos
     strokeWeight(this.weight)
     stroke(this.color)
 
-    this.diameter = localPos ** 2.5 * maxDist + this.maxWeight * localPos
+    this.diameter = localPos ** 4 * maxDist + this.maxWeight * localPos
 
     let curve = Math.sin(localPos * PI)
     this.x = center.x + curve * width * scaledCenter.x + wobble.x
@@ -69,7 +76,7 @@ function Polygon(i, g, maxDist) {
 
     push()
     noFill()
-    strokeWeight(localPos ** 2.5 * this.maxWeight)
+    strokeWeight(localPos ** 4 * this.maxWeight)
     stroke(this.color)
     translate(width * 0.5, height * 0.5)
     if (i % 2 == 0) {

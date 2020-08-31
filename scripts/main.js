@@ -8,6 +8,7 @@ let position = 0
 let scroll = new Scroll(numRegions)
 
 let mouseFollow = { x: 0, y: 0 }
+let radialBackground
 
 // tone nodes
 let granularSynthesizer = []
@@ -57,6 +58,9 @@ function setup() {
   
   loadImages()
   
+  let bgCtr = { x: center.x, y: center.y }
+  radialBackground = new RadialBackground(bgCtr)
+    
   var options = {
     preventDefault: true
   }
@@ -69,6 +73,8 @@ function draw() {
 
   scaledCenter.x = (mouseFollow.x / width - 0.5)
   scaledCenter.y = (mouseFollow.y / height - 0.5)
+
+  // radialBackground.draw(scaledCenter)
 
   if (isMuted) {
     muteButton.hide()
@@ -89,8 +95,8 @@ function draw() {
   infShapes.draw(center, scaledCenter)
   infShapes.update(scroll.regionPosition, scroll.regionIdx)
   // adjust denominator of argument for speed
-  infShapes.scroll(scroll.value / 30000)
-
+  infShapes.scroll(scroll.value / 15000)
+  
   scroll.update()
 
   // handle transition to a new region
@@ -149,6 +155,17 @@ function mouseWheel(event) {
 
 function mouseClicked() {
   if (Tone.context.state !== 'running') {
+    Tone.start()
+  }
+}
+
+// mobile interactions
+function touchMoved(eventt) {
+  scrollZoom(event)
+}
+
+function touchStarted() {
+  if (Tone.context.state != 'running') {
     Tone.start()
   }
 }
