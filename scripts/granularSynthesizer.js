@@ -13,7 +13,9 @@ function GranularSynthesizer(buffer) {
 
   this.toDestination = function () {
     grainPlayer.toDestination()
-  } this.connect = function (node) {
+  } 
+  
+  this.connect = function (node) {
     grainPlayer.connect(node)
   }
 
