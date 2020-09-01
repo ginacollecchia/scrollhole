@@ -27,7 +27,6 @@ function GranularSynthesizer(buffer) {
     let seekTime = Tone.now() - startTime
     this.stop()
     this.resumeTime = seekTime
-    // console.log("Pausing audio at ", seekTime)
   }
 
   this.stop = function() {
@@ -58,25 +57,20 @@ function GranularSynthesizer(buffer) {
       if (scrollSpeedSmoothed <= 1) {
         scrollSpeedSmoothed = 1
       }
-
-      // map(value, start1, stop1, start2, stop2, [withinBounds])
-      grainPlayer.volume.value = map(Math.abs(scrollSpeed), 0, 300, -12, 0, false)
-    
+      
+      // range of scrollSpeed is approx -500 to 500; range of scrollSpeedSmoothed is approx 1 to 6
+      // volume: Decibels
+      grainPlayer.volume.value = map(Math.abs(scrollSpeed), 0, 300, -12, 0, false) // -12  
       // overlap: Time: The duration of the cross-fade between successive grains.
-      grainPlayer.overlap = 1/Math.abs(scrollSpeed) + 0.3  // 1.3 to .3
+      grainPlayer.overlap = 1/(Math.abs(scrollSpeed) + 0.01) + 0.3  // a lot to 0.3
       // grainSize: Time: The size of each chunk of audio that the buffer is chopped into and played back at.
-      grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01 // 2 to 1/3
+      grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01 // 2 to 0.333
       grainPlayer.playbackRate = scrollSpeedSmoothed/6 + 0.01 // 0.167 to 1
       if (scrollSpeed < 0) {
         grainPlayer.reverse = true
       } else {
         grainPlayer.reverse = false
-      }
-      
+      } 
     }
-    
-
-    // console.log("Density = ", grainPlayer.overlap, ", volume = ", grainPlayer.volume.value, ", grainSize = ", grainPlayer.grainSize, ", playbackSpeed = ", grainPlayer.playbackRate, ", scrollSpeed = ", scrollSpeed, ", scrollSpeedSmoothed = ", scrollSpeedSmoothed)
   }
-
 }

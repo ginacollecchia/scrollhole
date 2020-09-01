@@ -169,8 +169,8 @@ function loadImages() {
   // logo
   logo = createImg('./img/scrollholeLogo.png')
   logo.id('logo')
-  logo.size(600, 92)
-  logo.position(25, 30)
+  logo.size(476, 100)
+  logo.position(25, 25)
 
   // mute button
   unmuteButton = createImg('./img/unmuteButtonGreenBlack.png')
