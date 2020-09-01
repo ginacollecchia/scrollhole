@@ -1,17 +1,33 @@
-Welcome to Scrollhole, our submission for the 2020 Bitrate Hackathon. Who are we? I'm Gina Collecchia
+Gina: Welcome to Scrollhole, our submission for the 2020 Bitrate Hackathon, sponsored by Gray Area and Google Magenta. 
+X - visual: Bitrate Hackathon Graphic, Scrollhole graphic, "by Gina Collecchia and Erc Heep"
 
-And I'm Eric Heep.
+Gina: Who are we? I'm Gina Collecchia--   Eric: And I'm Eric Heep.
+Gina: We both come from graduate programs in computer music, myself from CCRMA, and Eric from CalArts. For this project, I took the lead on audio playback, sound design, and the overall concept, while Eric programmed the visual animations and handled timing. Here's how we made it. 
+X - visual: X Headshots, with CCRMA and CalArts logos popping up briefly
 
-We met at Meow Wolf on the Sound Team! And both come from a background of music software design. For this project, Gina took the lead on audio playback and sound design, while Eric coded up the visuals. Here's what's going on. 
+Gina: Scrollhole is a generative audio-visual web interface, where the interaction of scrolling produces what you see and hear. You can scroll through the hole on a trackpad, mouse wheel, or on mobile. 
+- visual: X Slow scrolling. Then, user using Scrollhole with a trackpad, and on mobile.
 
-Scrollhole is a generative audio interface whereby scrolling produces what you see and hear. The speed of the scroll determines many things about the audio playback, which is a Tone GrainPlayer object. It changes the grain size, overlap, volume, and playback rate of the audio buffer. Scrolling backwards, out of the tunnel, changes whether or not the buffer is played back in reverse. 
+Gina: The speed of scrolling determines many things about the audio playback, which is made up of 3 Tone.js GrainPlayer objects. Scroll speed changes the grain size, overlap, volume, and playback rate of the audio buffer. 
+- visual: X Different speeds of scrolling. Then, show code: GranularSynthesis.js: update(). 
 
-There are 3 regions of the Scrollhole, triggered when you have advanced or retreated enough into the tunnel. During the transition from one region to the next, Gain objects are modified on the GrainPlayers to crossfade the audio. 
+Gina: Scrolling backwards, out of the tunnel, makes the audio buffer playback in reverse. 
+- visual: X Scrolling in reverse.
 
-In addition to Tone.js, Scrollhole makes ample use of P5.js.
+Gina: In addition to Tone.js, Scrollhole makes ample use of P5.js. Just like the sounds, aspects of the shapes change with the scroll speed. The colors of the radial background also slowly change as you progress through Scrollhole. 
+- visual: X Tone and then P5 logos. X More scrolling.
 
-(Eric say fancy stuff about P5 animations)
+Gina: There are 3 regions of Scrollhole, triggered when you have advanced or retreated enough into the tunnel. During the transition from one region to the next, Gain objects are modified on the GrainPlayers to crossfade the audio from stretching sounds, to bubbling sounds, to windy chimey sounds. The visuals shift from circles, to arcs, to hexagons, with the number of sides of the shapes changing gradually during each transition. 
+- visual: X Transitioning in Scrollhole. X Show cuts of all 3 transitions. 
 
-We also explored using Magenta.js to accompany our noisy sounds with something more melodic, or a drum beat. We ran out of time to implement this accompaniment, but plan it for future work. Clicking on the circles or hexagons or lines changes the color, and this could be a sort of sequencer in the Scrollhole "score". Then, Magenta could accompany the user's sequence with patterns using its generative RNN models, DrumRNN and GrooVAE.
+Gina: We also explored using Magenta to accompany our noisy sounds with something more melodic, or a drum beat. We generated some 8-bar drum loops with Magenta Studio in Ableton Live. 
+- visual: X Magenta logo. Ableton Live with Magenta Studio. Click on Generate. Generate new tracks. Play 2.
 
-We'd like to thank Myles Borins for help getting a local Node server running, and Alan Watts for bug testing! Happy scrolling!
+Gina: But ultimately, we thought it would be cooler if instead, the machine learning was done in real-time, with Magenta.js. We ran out of time to implement this accompaniment, but plan it for future work. The shapes could represent a score, where clicking on the circles or hexagons or arcs could turn notes on and off, with the sequence repeating visually every 4th shape, or beat, and your position in the tunnel determining the position of the playhead. Then, Magenta.js could accompany the user's input sequence with patterns using its generative RNN models, DrumRNN and GrooVAE.
+- visual: Static Scrollhole. Click mouse on different circles.
+
+Furthermore, we felt the sound design of the granular synthesizers sufficiently captured the chaos of the visual animations.
+- visual/audio: X moments of good sound design
+
+Gina: That's it! We hope you enjoyed our submission. We'd like to thank Myles Borins for help with Node.js, and Alan Watts for help with testing! Now get to scrolling.
+X - visual: same as intro

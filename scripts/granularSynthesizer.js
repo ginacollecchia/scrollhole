@@ -13,9 +13,7 @@ function GranularSynthesizer(buffer) {
 
   this.toDestination = function () {
     grainPlayer.toDestination()
-  }
-
-  this.connect = function (node) {
+  } this.connect = function (node) {
     grainPlayer.connect(node)
   }
 
@@ -55,6 +53,7 @@ function GranularSynthesizer(buffer) {
       // grainSize: Time: The size of each chunk of audio that the buffer
       // is chopped into and played back at.
       grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01 // 2 to 1/3
+
       grainPlayer.playbackRate = scrollSpeedSmoothed/6 + 0.01 // 0.167 to 1
 
       if (scrollSpeed < 0) {
