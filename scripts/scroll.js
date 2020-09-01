@@ -1,7 +1,7 @@
 // scroll.js
 
 function Scroll(numRegions) {
-  this.max = 600
+  this.max = 200
   this.min = 0
   this.value = 0
   this.speed = 12

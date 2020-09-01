@@ -1,13 +1,13 @@
 // radialBackground.js
 
-function RadialBackground(center, inner, outer) {
-  this.draw = function(center, inner, outer) {
+function RadialBackground(center, inner, outer, alpha) {
+  this.draw = function(center, inner, outer, alpha) {
 
     let c1 = HSVtoRGB(inner.h/360.0, inner.s/360.0, inner.b/360.0)
-    rgba1 = 'rgba(' + c1.r + ', ' + c1.g + ', ' + c1.b + ', 1.0)'
+    rgba1 = 'rgba(' + c1.r + ', ' + c1.g + ', ' + c1.b + ', ' + alpha + ')'
 
     let c2 = HSVtoRGB(outer.h/360.0, outer.s/360.0, outer.b/360.0)
-    rgba2 = 'rgba(' + c2.r + ', ' + c2.g + ', ' + c2.b + ', 1.0)'
+    rgba2 = 'rgba(' + c2.r + ', ' + c2.g + ', ' + c2.b + ', ' + alpha + ')'
 
     let mouseXpercentage = Math.round(center.x / windowWidth * 100)
     let mouseYpercentage = Math.round(center.y / windowHeight * 100)

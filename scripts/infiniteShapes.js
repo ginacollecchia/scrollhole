@@ -14,12 +14,12 @@ function InfiniteShapes() {
   let wobble = { x: 0.0, y: 0.0 }
   this.regionPos = 0.0
 
-  this.draw = function(center, scaledCenter, region, nextRegion, inTransition, regionGain, nextRegionGain) {
+  this.draw = function(center, scaledCenter, region, nextRegion, inTransition, alpha) {
     shapes.forEach(shape => {
       shape.update(wobble)
 
       let sinPos = sin(this.regionPos * PI)
-      if (shape.region == region) {
+      if (shape.region != region) {
         sinPos = 0.0
       }
 
@@ -33,7 +33,7 @@ function InfiniteShapes() {
       }
 
       if (check && inTransition) {
-        this.checkShapes(shape, region, nextRegion, regionGain, nextRegionGain)
+        this.checkShapes(shape, region, nextRegion)
       }
     })
   }
@@ -56,7 +56,7 @@ function InfiniteShapes() {
     }
   }
 
-  this.checkShapes = function(shape, region, nextRegion, regionGain, nextRegionGain) {
+  this.checkShapes = function(shape, region, nextRegion) {
     const state = Math.round(Math.random())
 
     let props = {
@@ -80,9 +80,7 @@ function InfiniteShapes() {
 
   this.clicked = function() {
     shapes.forEach(shape => {
-      if (shape.visible == true && !shape.clicked()) {
-        shape.clicked()
-      }
+      shape.clicked()
     })
   }
 

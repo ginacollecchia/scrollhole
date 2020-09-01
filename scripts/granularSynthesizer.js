@@ -13,9 +13,7 @@ function GranularSynthesizer(buffer) {
 
   this.toDestination = function () {
     grainPlayer.toDestination()
-  }
-
-  this.connect = function (node) {
+  } this.connect = function (node) {
     grainPlayer.connect(node)
   }
 
@@ -37,40 +35,32 @@ function GranularSynthesizer(buffer) {
     grainPlayer.start(0, resumeTime)
   }
 
-  this.fadeOut = function(time) {
-    grainPlayer.fadeOut = time
-  }
-
-  this.fadeIn = function(time) {
-    grainPlayer.fadeIn = time
-  }
-
-  this.scroll = function() {
-
-  }
-
   this.update = function(scrollSpeed, scrollStopped) {
     if (scrollStopped) {
       grainPlayer.volume.value -= 2
-    } else {      
+    } else {
       let scrollSpeedSmoothed = Math.log(Math.abs(scrollSpeed) + 1)
       if (scrollSpeedSmoothed <= 1) {
         scrollSpeedSmoothed = 1
       }
-      
-      // range of scrollSpeed is approx -500 to 500; range of scrollSpeedSmoothed is approx 1 to 6
-      // volume: Decibels
-      grainPlayer.volume.value = map(Math.abs(scrollSpeed), 0, 300, -12, 0, false) // -12  
+
+      // map(value, start1, stop1, start2, stop2, [withinBounds])
+      grainPlayer.volume.value = map(Math.abs(scrollSpeed), 0, 300, -12, 0, false)
+
       // overlap: Time: The duration of the cross-fade between successive grains.
-      grainPlayer.overlap = 1/(Math.abs(scrollSpeed) + 0.01) + 0.3  // a lot to 0.3
-      // grainSize: Time: The size of each chunk of audio that the buffer is chopped into and played back at.
-      grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01 // 2 to 0.333
+      grainPlayer.overlap = 1/Math.abs(scrollSpeed) + 0.3  // 1.3 to .3
+
+      // grainSize: Time: The size of each chunk of audio that the buffer
+      // is chopped into and played back at.
+      grainPlayer.grainSize = 2/scrollSpeedSmoothed + 0.01 // 2 to 1/3
+
       grainPlayer.playbackRate = scrollSpeedSmoothed/6 + 0.01 // 0.167 to 1
+
       if (scrollSpeed < 0) {
         grainPlayer.reverse = true
       } else {
         grainPlayer.reverse = false
-      } 
+      }
     }
   }
 }

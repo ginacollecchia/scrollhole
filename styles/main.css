@@ -62,22 +62,22 @@ a {
   height:100%;
   width:100%;
   z-index:-1;
-  
+
   /*Fallback if gradeints don't work */
   background: #9b59b6;
   /*Linear gradient... */
-  background: 
+  background:
     radial-gradient(
-     at center, #3498db, #9b59b6
-    );
+    at center, #ffffff, #ffffff
+  );
 }
 
 /* mobile view */
-@media only screen and (max-device-width: 480px) {  
+@media only screen and (max-device-width: 480px) {
   .modal-content {
     width: 80%;
   }
-  
+
   #aboutButton img {
     width: 150px;
     height: auto;
@@ -85,5 +85,5 @@ a {
     right: 170px;
     top: 0px;
   }
-    
+
 }
