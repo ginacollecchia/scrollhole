@@ -94,7 +94,7 @@ function setup() {
 
   infShapes = new InfiniteShapes()
 
-  infShapes.updateGroup(12)
+  infShapes.updateGroup(10)
 
   loadImages()
 
@@ -124,6 +124,11 @@ function interpColors(c1, c2) {
   }
 }
 
+
+let wheelDelta = 0
+let alpha = 0.0
+let alphaInc = 1.0 / 60.0
+
 function draw() {
   clear()
 
@@ -131,7 +136,12 @@ function draw() {
   let outer = interpColors(rColors[scroll.region].outer, rColors[scroll.nextRegion].outer)
 
   mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
-  radialBackground.draw(mouseFollow, inner, outer)
+
+  if (alpha < 1.0) {
+    alpha += alphaInc
+  }
+
+  radialBackground.draw(mouseFollow, inner, outer, alpha)
 
   scaledCenter.x = (mouseFollow.x / width - 0.5)
   scaledCenter.y = (mouseFollow.y / height - 0.5)
@@ -163,6 +173,12 @@ function draw() {
     granularSynthesizer[scroll.region].update(scroll.value, scroll.stopped)
     granularGains[scroll.region].gain.value = scroll.regionGain
   }
+
+  if (wheelDelta > 0) {
+    wheelDelta -= 3
+  } else if (wheelDelta < 0) {
+    wheelDelta += 3
+  }
 }
 
 function loadImages() {
@@ -184,19 +200,24 @@ function loadImages() {
   muteButton.size(80, 80)
   muteButton.position(windowWidth - 110, 25)
   muteButton.mousePressed(toggleMute)
-  
+
   if (Tone.context.state !== 'running') {
     isMuted = true
   }
-  
 }
 
 function mousePressed() {
-  infShapes.clicked()
+  //infShapes.clicked()
 }
 
 function mouseWheel(event) {
-  scroll.scrollZoom(event.delta)
+  if (event.delta > 3 || event.delta < -3) {
+    scroll.scrollZoom(event.delta)
+  } else {
+    wheelDelta += event.delta
+    scroll.scrollZoom(wheelDelta)
+    console.log(wheelDelta)
+  }
 }
 
 // mobile interactions

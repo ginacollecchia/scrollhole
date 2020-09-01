@@ -20,11 +20,12 @@ function Circle(i, g, maxDist) {
   this.maxDist = maxDist
   this.type = 'circle'
   this.region = 0
+  this.alpha = 0.0
 
   this.origin = (1.0 / g) * i + 1.0 / g * 0.5
   this.color = 'black'
   this.hue = 40
-  this.maxWeight = 60
+  this.maxWeight = 70
   this.diameter = 0
   let lastPos = 0.0
 
@@ -33,6 +34,7 @@ function Circle(i, g, maxDist) {
   this.y = 0
 
   let wobble = { x: 0.0, y:0.0 }
+  let wobbleInc = 0.0
 
   this.update = function(w) {
     wobble = w
@@ -44,11 +46,10 @@ function Circle(i, g, maxDist) {
     if (d > this.diameter * 0.5 - this.weight * 0.5 &&
       d < this.diameter * 0.5 + this.weight * 0.5) {
         // change to be a function of diameter: when diameter = windowWidth, color is dark green, when diameter = 0, color is light green
-        this.color = 'red'
+        colorMode(HSB, 360)
+        let c = color(random(0, 360), 360, 360)
+        this.color = c
       return true
-    } else {
-      this.color = 'black'
-      return false
     }
   }
 
@@ -59,16 +60,21 @@ function Circle(i, g, maxDist) {
       localPos += 1.0
     }
 
+    wobbleInc += 0.02 * (sinPos * -1.0 + 1.0) * localPos
+    let wSin = sin(wobbleInc * 2 * PI) * 30 * localPos
+    let wCos = cos(wobbleInc * 2 * PI) * 30 * localPos
+    wobbleInc %= 1.0
+
     noFill()
-    this.weight = localPos ** 4 * this.maxWeight * localPos + 10 * sinPos
+    this.weight = localPos ** 3 * this.maxWeight * sinPos
     strokeWeight(this.weight)
     stroke(this.color)
 
     this.diameter = localPos ** 4 * maxDist + this.maxWeight * localPos
 
     let curve = Math.sin(localPos * PI)
-    this.x = center.x + curve * width * scaledCenter.x + wobble.x
-    this.y = center.y + curve * height * scaledCenter.y + wobble.y,
+    this.x = center.x + curve * width * scaledCenter.x + wobble.x + wSin
+    this.y = center.y + curve * height * scaledCenter.y + wobble.y + wCos
 
     circle(this.x, this.y, this.diameter)
 
@@ -92,6 +98,7 @@ function Polygon(i, g, maxDist, regionPos) {
   this.maxWeight = 100
   this.type = 'polygon'
   this.region = 2
+  this.alpha = 0.0
 
   let wobble = { x: 0.0, y:0.0 }
   let lastPos = 0.0
@@ -164,6 +171,7 @@ function Arcs(i, g, maxDist) {
   this.color = 'black'
   this.hue = 240
   this.maxWeight = 20
+  this.alpha = 0.0
 
   this.diameter = 0
 
@@ -177,6 +185,7 @@ function Arcs(i, g, maxDist) {
   this.heightThird = height / 3.0
   this.widthThird = width / 3.0
   let wobble = { x: 0.0, y:0.0 }
+  let wobbleInc = 0.0
 
   let lastPos = 0.0
 
@@ -190,6 +199,8 @@ function Arcs(i, g, maxDist) {
   this.draw = function(pos, regionPos, center, scaledCenter) {
     regionPos = regionPos * -1.0 + 1.0
     let flatten = regionPos
+    flatten *= scaledCenter.y
+
     let localPos = map(pos, this.origin, this.origin + 1.0, 0.0, 1.0)
 
     if (localPos < 0.0) {
@@ -198,48 +209,52 @@ function Arcs(i, g, maxDist) {
 
     let revPos = localPos * -1.0 + 1.0
 
+    wobbleInc += 0.01 * localPos
+    let wSin = sin(wobbleInc * PI)
+
     noFill()
     this.weight = revPos ** 2 * this.maxWeight
     strokeWeight(this.weight)
     stroke(this.color)
 
-    let edgeHeight = this.quarterHeight * localPos
-    let sideArcHeight = edgeHeight + edgeHeight + edgeHeight
-    let bottomEdgeHeight = this.halfHeight + this.quarterHeight + this.quarterHeight * revPos
+    let edgeHeight = this.halfHeight * localPos
+    let sideArcHeight = edgeHeight * 4
+    let bottomEdgeHeight = this.halfHeight + this.halfHeight * revPos
     let offset = this.weight
     let halfRegionPos = regionPos * 0.5
 
     localPos = sqrt(localPos)
     revPos = localPos * -1.0 + 1.0
+    let widthOffset = scaledCenter.x * this.halfWidth * 0.5 + wSin * 20
 
     arc(
-      0, edgeHeight - offset,
+      widthOffset, edgeHeight - offset,
       this.halfWidth + this.halfWidth * revPos, sideArcHeight * flatten,
       0, PI
     )
     arc(
-      this.halfWidth, edgeHeight - offset,
+      this.halfWidth + widthOffset, edgeHeight - offset,
       this.halfWidth * localPos, this.quarterHeight * localPos * flatten,
       PI, PI * 2
     )
     arc(
-      width, edgeHeight - offset,
+      width + widthOffset, edgeHeight - offset,
       this.halfWidth + this.halfWidth * revPos, sideArcHeight * flatten,
       0, PI
     )
 
     arc(
-      0, bottomEdgeHeight + offset,
+      0 + widthOffset, bottomEdgeHeight + offset,
       this.halfWidth + this.halfWidth * revPos, sideArcHeight * flatten,
       PI, PI * 2
     )
     arc(
-      this.halfWidth, bottomEdgeHeight + offset,
+      this.halfWidth + widthOffset, bottomEdgeHeight + offset,
       this.halfWidth * localPos, this.quarterHeight * localPos * flatten,
       0, PI
     )
     arc(
-      width, bottomEdgeHeight + offset,
+      width + widthOffset, bottomEdgeHeight + offset,
       this.halfWidth + this.halfWidth * revPos, sideArcHeight * flatten,
       PI, PI * 2,
     )
