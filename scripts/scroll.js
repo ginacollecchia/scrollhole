@@ -23,6 +23,7 @@ function Scroll(numRegions) {
 
   this.regionGain = 1.0
   this.nextRegionGain = 0.0
+  this.hueScalar = 0.0
 
   const clampNumber = (num, a, b) => Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b))
 
@@ -118,6 +119,11 @@ function Scroll(numRegions) {
 
     this.position += this.value
     this.regionPosition = this.position / this.distance
+    if (this.regionPosition > 0.5) {
+      this.hueScalar = this.regionPosition - 0.5
+    } else {
+      this.hueScalar = this.regionPosition * -1.0 + 1.0 - 0.5
+    }
     this.regionCheck()
     this.halfwayCheck()
     this.gainCheck()

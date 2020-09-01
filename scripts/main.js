@@ -14,9 +14,49 @@ let radialBackground
 let granularSynthesizer = []
 let granularGains = []
 let masterGain
+let lastTouchY
 
 let muteButton, unmuteButton, clickForSound, logo // images
 let isMuted = false
+
+let rColors = [
+  {
+    inner: {
+      h: 0,
+      s: 359,
+      b: 359,
+    },
+    outer: {
+      h: 180,
+      s: 359,
+      b: 359,
+    }
+  },
+  {
+    inner: {
+      h: 120,
+      s: 359,
+      b: 359,
+    },
+    outer: {
+      h: 300,
+      s: 359,
+      b: 359,
+    }
+  },
+  {
+    inner: {
+      h: 240,
+      s: 0,
+      b: 359,
+    },
+    outer: {
+      h: 60,
+      s: 0,
+      b: 359,
+    }
+  },
+]
 
 function preload() {
   masterGain = new Tone.Gain().toDestination()
@@ -46,7 +86,6 @@ function setup() {
   let cvn = createCanvas(windowWidth, windowHeight)
   cvn.style('display', 'block')
 
-  colorMode(HSB, 360)
   frameRate(40)
 
   center.x = width / 2.0
@@ -61,21 +100,42 @@ function setup() {
   loadImages()
 
   let bgCtr = { x: center.x, y: center.y }
-  radialBackground = new RadialBackground(bgCtr)
+  radialBackground = new RadialBackground(center, rColors[0].inner, rColors[0].outer)
 
   var options = {
     preventDefault: true
   }
 }
 
+function interpVals(v1, v2) {
+  let dist = (v2 - v1)
+  let val = v1 + dist * scroll.hueScalar
+
+  return ((val % 360) + 360) % 360
+}
+function interpColors(c1, c2) {
+  let h = interpVals(c1.h, c2.h)
+  let s = interpVals(c1.s, c2.s)
+  let b = interpVals(c1.b, c2.b)
+
+  return {
+    h: h,
+    s: s,
+    b: b,
+  }
+}
+
 function draw() {
   clear()
+
+  let inner = interpColors(rColors[scroll.region].inner, rColors[scroll.nextRegion].inner)
+  let outer = interpColors(rColors[scroll.region].outer, rColors[scroll.nextRegion].outer)
+
   mouseFollow = pointBetweenPoints({ x: mouseX, y: mouseY }, mouseFollow, 0.92)
-  radialBackground.draw(mouseFollow)
+  radialBackground.draw(mouseFollow, inner, outer)
 
   scaledCenter.x = (mouseFollow.x / width - 0.5)
   scaledCenter.y = (mouseFollow.y / height - 0.5)
-
 
   if (isMuted) {
     muteButton.hide()
@@ -146,23 +206,21 @@ function mousePressed() {
   infShapes.clicked()
 }
 
-function scrollZoom(event) {
+function mouseWheel(event) {
   scroll.scrollZoom(event.delta)
 }
 
-function mouseWheel(event) {
-  scrollZoom(event)
+// mobile interactions
+let lastMouseY = 0
+function touchMoved() {
+  let mouseYDelta = lastMouseY - mouseY
+  scroll.scrollZoom(mouseY)
 }
 
 function mouseClicked() {
   if (Tone.context.state !== 'running') {
     Tone.start()
   }
-}
-
-// mobile interactions
-function touchMoved(eventt) {
-  scrollZoom(event)
 }
 
 function touchStarted() {
