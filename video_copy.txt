@@ -1,0 +1,17 @@
+Welcome to Scrollhole, our submission for the 2020 Bitrate Hackathon. Who are we? I'm Gina Collecchia
+
+And I'm Eric Heep.
+
+We met at Meow Wolf on the Sound Team! And both come from a background of music software design. For this project, Gina took the lead on audio playback and sound design, while Eric coded up the visuals. Here's what's going on. 
+
+Scrollhole is a generative audio interface whereby scrolling produces what you see and hear. The speed of the scroll determines many things about the audio playback, which is a Tone GrainPlayer object. It changes the grain size, overlap, volume, and playback rate of the audio buffer. Scrolling backwards, out of the tunnel, changes whether or not the buffer is played back in reverse. 
+
+There are 3 regions of the Scrollhole, triggered when you have advanced or retreated enough into the tunnel. During the transition from one region to the next, Gain objects are modified on the GrainPlayers to crossfade the audio. 
+
+In addition to Tone.js, Scrollhole makes ample use of P5.js.
+
+(Eric say fancy stuff about P5 animations)
+
+We also explored using Magenta.js to accompany our noisy sounds with something more melodic, or a drum beat. We ran out of time to implement this accompaniment, but plan it for future work. Clicking on the circles or hexagons or lines changes the color, and this could be a sort of sequencer in the Scrollhole "score". Then, Magenta could accompany the user's sequence with patterns using its generative RNN models, DrumRNN and GrooVAE.
+
+We'd like to thank Myles Borins for help getting a local Node server running, and Alan Watts for bug testing! Happy scrolling!
