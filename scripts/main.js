@@ -245,6 +245,8 @@ function touchStarted() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  unmuteButton.position(windowWidth - 110, 25)
+  muteButton.position(windowWidth - 110, 25)
 }
 
 function toggleMute() {
