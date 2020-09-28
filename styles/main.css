@@ -72,6 +72,10 @@ a {
   );
 }
 
+#tapForSound {
+  display: none;
+}
+
 /* mobile view */
 @media only screen and (max-device-width: 480px) {
   .modal-content {
@@ -84,6 +88,16 @@ a {
     position: absolute;
     right: 170px;
     top: 0px;
+  }
+  
+  #tapForSound {
+    display: inline;
+    color: 'white';
+    font-family: EffectsEighty;
+    font-size: 60px;
+    position: absolute;
+    left: 25px;
+    top: 100px;
   }
 
 }

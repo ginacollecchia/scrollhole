@@ -6,7 +6,7 @@ Gina: We both come from graduate programs in computer music, myself from CCRMA, 
 X - visual: X Headshots, with CCRMA and CalArts logos popping up briefly
 
 Gina: Scrollhole is a generative audio-visual web interface, where the interaction of scrolling produces what you see and hear. You can scroll through the hole on a trackpad, mouse wheel, or on mobile. 
-- visual: X Slow scrolling. Then, user using Scrollhole with a trackpad, and on mobile.
+X - visual: X Slow scrolling. X Then, user using Scrollhole with a trackpad, and on mobile.
 
 Gina: The speed of scrolling determines many things about the audio playback, which is made up of 3 Tone.js GrainPlayer objects. Scroll speed changes the grain size, overlap, volume, and playback rate of the audio buffer. 
 X - visual: X Different speeds of scrolling. X Then, show code: GranularSynthesis.js: update(). 
@@ -15,10 +15,10 @@ Gina: Scrolling backwards, out of the tunnel, makes the audio buffer playback in
 X - visual: X Scrolling in reverse.
 
 Gina: In addition to Tone.js, Scrollhole makes ample use of P5.js. Just like the sounds, aspects of the shapes change with the scroll speed. The colors of the radial background also slowly change as you progress through Scrollhole. 
-- visual: X Tone and then P5 logos. X More scrolling.
+X - visual: X Tone and then P5 logos. X More scrolling.
 
 Gina: There are 3 regions of Scrollhole, triggered when you have advanced or retreated enough into the tunnel. During the transition from one region to the next, Gain objects are modified on the GrainPlayers to crossfade the audio from stretching sounds, to bubbling sounds, to windy chimey sounds. The visuals shift from circles, to arcs, to hexagons, with the number of sides of the shapes changing gradually during each transition. 
-- visual: X Transitioning in Scrollhole. X Show cuts of all 3 transitions. 
+X - visual: X Transitioning in Scrollhole. X Show cuts of all 3 transitions. 
 
 Gina: We also explored using Magenta to accompany our noisy sounds with something more melodic, or a drum beat. We generated some 8-bar drum loops with Magenta Studio in Ableton Live. 
 X - visual: X Magenta logo. X Ableton Live with Magenta Studio. X Click on Generate. X Generate new tracks. X Play 2.

@@ -58,6 +58,12 @@ let rColors = [
   },
 ]
 
+$(".tapForSound").click(function(e) {
+    e.stopPropagation() // This is the preferred method.
+    // return false        // This should not be used unless you do not want
+                         // any click events registering inside the div
+})
+
 function preload() {
   masterGain = new Tone.Gain().toDestination()
   // let soundFiles = ['./audio/stretchingStereo.mp3', './audio/bubblingOcean.mp3', './audio/grassStorm.mp3']
@@ -216,7 +222,6 @@ function mouseWheel(event) {
   } else {
     wheelDelta += event.delta
     scroll.scrollZoom(wheelDelta)
-    console.log(wheelDelta)
   }
 }
 
