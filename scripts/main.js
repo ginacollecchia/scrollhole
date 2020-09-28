@@ -228,8 +228,10 @@ function mouseWheel(event) {
 // mobile interactions
 let lastMouseY = 0
 function touchMoved() {
-  let mouseYDelta = lastMouseY - mouseY
-  scroll.scrollZoom(mouseY)
+  let mouseYMapped = map(mouseY, 0, height, width/2.0, -width/2.0)
+  let mouseYDelta = lastMouseY - mouseYMapped
+  scroll.scrollZoom(mouseYDelta)
+  lastMouseY = mouseYMapped
 }
 
 function mouseClicked() {
@@ -248,6 +250,8 @@ function touchStarted() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  unmuteButton.position(windowWidth - 110, 25)
+  muteButton.position(windowWidth - 110, 25)
 }
 
 function toggleMute() {

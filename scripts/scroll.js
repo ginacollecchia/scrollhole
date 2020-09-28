@@ -12,7 +12,7 @@ function Scroll(numRegions) {
   this.inTransition = false
 
   // distance to next region
-  this.distance = 300000
+  this.distance = 100000
   this.position = this.distance / 2
   this.region = 0
   this.nextRegion = numRegions - 1
