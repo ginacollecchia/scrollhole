@@ -90,7 +90,7 @@ a {
     top: 0px;
   }
   
-  #tapForSound {
+  /* #tapForSound {
     display: inline;
     color: 'white';
     font-family: EffectsEighty;
@@ -98,6 +98,6 @@ a {
     position: absolute;
     left: 25px;
     top: 100px;
-  }
+  } */
 
 }
